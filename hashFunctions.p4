@@ -1,7 +1,7 @@
 //HASH KEY CALCULATION
-bit<HASH_TABLE_BIT_WIDTH> hashKey;
+action actionCalculateHashKey(in headers hdr, inout metadata meta) {
+    bit<HASH_TABLE_BIT_WIDTH> hashKey;
 
-action tableCalculateHashKey(in headers hdr, inout metadata meta) {
     hash(
         hashKey, 
         HashAlgorithm.crc16, 
@@ -26,10 +26,10 @@ register<ip4Addr_t>(HASH_TABLE_ENTRIES) registerSrcAddr;
 
 action actionUpdateSrcAddr(in headers hdr, inout metadata meta) {
     //Saves the value in the metadata to check for collisions later in the flow
-    meta.srcAddr = registerSrcAddr[meta.hashKey];
-    if (hdr.ipv4.srcAddr != registerSrcAddr[meta.hashKey]){
+    registerSrcAddr.read(meta.srcAddr, meta.hashKey);
+    if (hdr.ipv4.srcAddr != meta.srcAddr){
         //Overwrites the srcAddress in the register if necessary
-        registerSrcAddr[meta.hashKey] = hdr.ipv4.srcAddr;
+        registerSrcAddr.write(meta.hashKey, hdr.ipv4.srcAddr);
     }
 }
 
@@ -37,9 +37,9 @@ action actionUpdateSrcAddr(in headers hdr, inout metadata meta) {
 register<ip4Addr_t>(HASH_TABLE_ENTRIES) registerDstAddr;
 
 action actionUpdateDstAddr(in headers hdr, inout metadata meta) {
-    meta.dstAddr = registerDstAddr[meta.hashKey];
-    if (hdr.ipv4.dstAddr != registerDstAddr[meta.hashKey]){
-        registerDstAddr[meta.hashKey] = hdr.ipv4.dstAddr;
+    registerDstAddr.read(meta.dstAddr, meta.hashKey);
+    if (hdr.ipv4.dstAddr != meta.dstAddr){
+        registerDstAddr.write(meta.hashKey, hdr.ipv4.dstAddr);
     }
 }
 
@@ -47,9 +47,9 @@ action actionUpdateDstAddr(in headers hdr, inout metadata meta) {
 register<port_t>(HASH_TABLE_ENTRIES) registerSrcPort;
 
 action actionUpdateSrcPort(in headers hdr, inout metadata meta) {
-    meta.srcPort = registerSrcPort[meta.hashKey];
-    if (hdr.tcp.srcPort != registerSrcPort[meta.hashKey]){
-        registerSrcPort[meta.hashKey] = hdr.tcp.srcPort;
+    registerSrcPort.read(meta.srcPort, meta.hashKey);
+    if (hdr.tcp.srcPort != meta.srcPort){
+        registerSrcPort.write(meta.hashKey, hdr.tcp.srcPort);
     }
 }
 
@@ -57,9 +57,9 @@ action actionUpdateSrcPort(in headers hdr, inout metadata meta) {
 register<port_t>(HASH_TABLE_ENTRIES) registerDstPort;
 
 action actionUpdateDstPort(in headers hdr, inout metadata meta) {
-    meta.dstPort = registerDstPort[meta.hashKey];
-    if (hdr.tcp.dstPort != registerDstPort[meta.hashKey]){
-        registerDstPort[meta.hashKey] = hdr.tcp.dstPort;
+    registerDstPort.read(meta.dstPort, meta.hashKey);
+    if (hdr.tcp.dstPort != meta.dstPort){
+        registerDstPort.write(meta.hashKey, hdr.tcp.dstPort);
     }
 }
 
@@ -67,8 +67,8 @@ action actionUpdateDstPort(in headers hdr, inout metadata meta) {
 register<protocol_t>(HASH_TABLE_ENTRIES) registerProtocol;
 
 action actionUpdateProtocol(in headers hdr, inout metadata meta) {
-    meta.protocol = registerProtocol[meta.hashKey];
-    if (hdr.ipv4.protocol != registerProtocol[meta.hashKey]){
-        registerProtocol[meta.hashKey] = hdr.ipv4.protocol;
+    registerProtocol.read(meta.protocol, meta.hashKey);
+    if (hdr.ipv4.protocol != meta.protocol){
+        registerProtocol.write(meta.hashKey, hdr.ipv4.protocol);
     }
 }

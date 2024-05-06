@@ -3,7 +3,9 @@
 #define ETHERTYPE_TURBOFLOW 0x081A
 
 #define HASH_TABLE_ENTRIES 65536
-#define HASH_TABLE_BIT_WIDTH 16
+#define HASH_TABLE_BIT_WIDTH 32
+
+const bit<16> TYPE_IPV4 = 0x800;
 
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
@@ -66,5 +68,6 @@ struct metadata {
     ip4Addr_t dstAddr;
     bit<16> srcPort;
     bit<16> dstPort;
+    protocol_t    protocol;
     bit<1> matchFlag;
 }

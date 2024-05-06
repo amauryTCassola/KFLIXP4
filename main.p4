@@ -3,6 +3,7 @@
 #include <v1model.p4>
 #include "definitions.p4"
 #include "hashFunctions.p4"
+#include "featureExtractor.p4"
 
 parser MyParser(packet_in packet,
                 out headers hdr,
@@ -51,6 +52,37 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
 control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
+
+    action drop() {
+        mark_to_drop();
+    }
+
+    action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
+        standard_metadata.egress_spec = port;
+        hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
+        hdr.ethernet.dstAddr = dstAddr;
+    }
+
+    table ipv4_lpm {
+        key = {
+            hdr.ipv4.dstAddr: lpm;
+        }
+        actions = {
+            ipv4_forward;
+            drop;
+            NoAction;
+        }
+        size = 1024;
+        default_action = drop();
+    }
+
+    table tableCalculateHashKey {
+        actions = {
+            actionCalculateHashKey(hdr, meta);
+        }
+        size = 0;
+        default_action = actionCalculateHashKey(hdr, meta);
+    }
 
     table tableUpdateSrcAddr { //table has no key, which means the default action will always be executed
         actions = {
@@ -106,18 +138,18 @@ control MyIngress(inout headers hdr,
 
     table tableResetPktCount {
         actions = {
-            actionResetPktCount(meta);
+            actionResetPktCount(hdr, meta);
         }
         size = 0;
-        default_action = actionResetPktCount(meta);
+        default_action = actionResetPktCount(hdr, meta);
     }
 
     table tableIncrementPktCount {
         actions = {
-            actionIncrementPktCount(meta);
+            actionIncrementPktCount(hdr, meta);
         }
         size = 0;
-        default_action = actionIncrementPktCount(meta);
+        default_action = actionIncrementPktCount(hdr, meta);
     }
 
     table tableResetByteCount {
@@ -157,7 +189,7 @@ control MyIngress(inout headers hdr,
                 if (hdr.ipv4.dstAddr == meta.dstAddr) {
                     if (hdr.tcp.srcPort == meta.srcPort) {
                         if (hdr.tcp.dstPort == meta.dstPort) {
-                            if(hdr.tcp.protocol == meta.protocol){
+                            if(hdr.ipv4.protocol == meta.protocol){
                                 tableSetMatch.apply();
                             }
                         }
@@ -175,7 +207,9 @@ control MyIngress(inout headers hdr,
                 tableResetByteCount.apply();
             }
 
-            hdr.feature.setValid();
+            hdr.features.setValid();
+
+            ipv4_lpm.apply();
 
             // If match flag == 0, multicast to the TurboFlow monitoring port.
             //if (tfMeta.matchFlag == 0) {
