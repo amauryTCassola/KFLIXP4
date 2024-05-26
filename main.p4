@@ -1,9 +1,7 @@
 /* -*- P4_16 -*- */
 #include <core.p4>
 #include <v1model.p4>
-#include "definitions.p4"
-#include "hashFunctions.p4"
-#include "featureExtractor.p4"
+#include "kflix/definitions.p4"
 
 parser MyParser(packet_in packet,
                 out headers hdr,
@@ -53,8 +51,11 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
+    #include "kflix/hashFunctions.p4"
+    #include "kflix/featureExtractor.p4"
+
     action drop() {
-        mark_to_drop();
+        mark_to_drop(standard_metadata);
     }
 
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
@@ -76,105 +77,11 @@ control MyIngress(inout headers hdr,
         default_action = drop();
     }
 
-    table tableCalculateHashKey {
-        actions = {
-            actionCalculateHashKey(hdr, meta);
-        }
-        size = 0;
-        default_action = actionCalculateHashKey(hdr, meta);
-    }
-
-    table tableUpdateSrcAddr { //table has no key, which means the default action will always be executed
-        actions = {
-            actionUpdateSrcAddr(hdr, meta);
-        }
-        size = 0;
-        default_action = actionUpdateSrcAddr(hdr, meta);
-    }
-
-    table tableUpdateDstAddr {
-        actions = {
-            actionUpdateDstAddr(hdr, meta);
-        }
-        size = 0;
-        default_action = actionUpdateDstAddr(hdr, meta);
-    }
-
-    table tableUpdateSrcPort {
-        actions = {
-            actionUpdateSrcPort(hdr, meta);
-        }
-        size = 0;
-        default_action = actionUpdateSrcPort(hdr, meta);
-    }
-
-    table tableUpdateDstPort {
-        actions = {
-            actionUpdateDstPort(hdr, meta);
-        }
-        size = 0;
-        default_action = actionUpdateDstPort(hdr, meta);
-    }
-
-    table tableUpdateProtocol {
-        actions = {
-            actionUpdateProtocol(hdr, meta);
-        }
-        size = 0;
-        default_action = actionUpdateProtocol(hdr, meta);
-    }
-
-    action actionSetMatch(inout metadata meta) {
-        meta.matchFlag = 1;
-    }
-
-    table tableSetMatch {
-        actions = {
-            actionSetMatch(meta);
-        }
-        size = 0;
-        default_action = actionSetMatch(meta);
-    }
-
-    table tableResetPktCount {
-        actions = {
-            actionResetPktCount(hdr, meta);
-        }
-        size = 0;
-        default_action = actionResetPktCount(hdr, meta);
-    }
-
-    table tableIncrementPktCount {
-        actions = {
-            actionIncrementPktCount(hdr, meta);
-        }
-        size = 0;
-        default_action = actionIncrementPktCount(hdr, meta);
-    }
-
-    table tableResetByteCount {
-        actions = {
-            actionResetByteCount(hdr, meta);
-        }
-        size = 0;
-        default_action = actionResetByteCount(hdr, meta);
-    }
-
-    table tableIncrementByteCount {
-        actions = {
-            actionIncrementByteCount(hdr, meta);
-        }
-        size = 0;
-        default_action = actionIncrementByteCount(hdr, meta);
-    }
-
     apply {
-
-        // Stage 0: apply L2 forwarding. (we'll figure this out later)
-        // ciForwardPacket(); // (forwardL2.p4)
-        // Next stages: apply TurboFlow (only to IPv4 packets)
-
         if (hdr.ipv4.isValid()) {
+            // apply basic ipv4 forwarding
+            ipv4_lpm.apply();
+
             // Update key fields.
             tableCalculateHashKey.apply();
             tableUpdateSrcAddr.apply();
@@ -208,8 +115,6 @@ control MyIngress(inout headers hdr,
             }
 
             hdr.features.setValid();
-
-            ipv4_lpm.apply();
 
             // If match flag == 0, multicast to the TurboFlow monitoring port.
             //if (tfMeta.matchFlag == 0) {

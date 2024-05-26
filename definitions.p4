@@ -11,6 +11,7 @@ typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 typedef bit<16> port_t;
 typedef bit<8> protocol_t;
+typedef bit<9>  egressSpec_t;
 
 // ethernet header
 header ethernet_t {
