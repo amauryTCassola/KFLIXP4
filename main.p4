@@ -7,7 +7,7 @@ parser MyParser(packet_in packet,
                 out headers hdr,
                 inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
-    
+
     // state machine for  parser
     state start {
         transition parse_ethernet;
@@ -17,17 +17,26 @@ parser MyParser(packet_in packet,
         packet.extract(hdr.ethernet);
         transition select(hdr.ethernet.etherType) {
             TYPE_IPV4: parse_ipv4;
+            TYPE_FEATURES: parse_features;
             default: accept;
+        }
     }
-}
-    
+
+    state parse_features {
+        packet.extract(hdr.features);
+        transition select(hdr.features.etherType){
+            TYPE_IPV4: parse_ipv4;
+            default: accept;
+        }
+    }
+
     state parse_ipv4 {
         packet.extract(hdr.ipv4);
         transition select(hdr.ipv4.protocol) {
             6: parse_tcp;
             default: accept;
-                }
-            }
+        }
+    }
 
     state parse_tcp {
         packet.extract(hdr.tcp);
@@ -80,6 +89,11 @@ control MyIngress(inout headers hdr,
 
     apply {
         if (hdr.ipv4.isValid()) {
+
+            hdr.ethernet.etherType = TYPE_FEATURES;
+            hdr.features.setValid();
+            hdr.features.etherType = TYPE_IPV4;
+
             // apply basic ipv4 forwarding
             ipv4_lpm.apply();
 
@@ -114,13 +128,6 @@ control MyIngress(inout headers hdr,
                 tableResetPktCount.apply();
                 tableResetByteCount.apply();
             }
-
-            hdr.features.setValid();
-
-            // If match flag == 0, multicast to the TurboFlow monitoring port.
-            //if (tfMeta.matchFlag == 0) {
-            //    apply(tiMcToCpu);
-            //}
         }
     }
 }
@@ -166,9 +173,9 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 control MyDeparser(packet_out packet, in headers hdr) {
     apply {
         packet.emit(hdr.ethernet);
+        packet.emit(hdr.features);
         packet.emit(hdr.ipv4);
         packet.emit(hdr.tcp);
-        packet.emit(hdr.features);
     }
 }
 

@@ -6,6 +6,7 @@
 #define HASH_TABLE_BIT_WIDTH 32
 
 const bit<16> TYPE_IPV4 = 0x800;
+const bit<16> TYPE_FEATURES = 0x1212;
 
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
@@ -53,14 +54,17 @@ header tcp_t {
 
 header features_t {
     bit<16> pktCount;
-    bit<32> byteCount;
+    bit<16> byteCount;
+    bit<16> maxByteCount;
+    bit<16> minByteCount;
+    bit<16> etherType;
 }
 
 struct headers {
     ethernet_t   ethernet;
+    features_t features;
     ipv4_t       ipv4;
     tcp_t      tcp;
-    features_t features;
 }
 
 struct metadata {
