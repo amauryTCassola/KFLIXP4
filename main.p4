@@ -60,6 +60,7 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
+    #include "kflix/approximateMeans.p4"
     #include "kflix/hashFunctions.p4"
     #include "kflix/featureExtractor.p4"
 
@@ -106,7 +107,7 @@ control MyIngress(inout headers hdr,
             tableUpdateProtocol.apply();
 
             // Set match flag if all key fields are equal.
-            //That is, if there wasn't a collision
+            //That is, if there wasn't a collision or this isn't the first packet of a flow
             if (hdr.ipv4.srcAddr == meta.srcAddr) {
                 if (hdr.ipv4.dstAddr == meta.dstAddr) {
                     if (hdr.tcp.srcPort == meta.srcPort) {
@@ -119,14 +120,33 @@ control MyIngress(inout headers hdr,
                 }
             }
 
-            // update features (depending on match flag).
+            // update or reset features according to match flag.
             if (meta.matchFlag == 1) {
+                //gets the packet count
+                //(not counting current packet)
+                tableLoadPktCount.apply();
+                
+                //checks if the current packet count is a power
+                //of 2 for the IAT calculations
+                checkPowerOf2ForIAT.apply();
+
+                //updates the IAT-related features
+                tableIncrementIat.apply();
+
+                //increments the packet count
                 tableIncrementPktCount.apply();
-                tableIncrementByteCount.apply();
+
+                //test wether number of packets is a power of 2
+                //for the other feature calculations
+                checkPowerOf2.apply();
+                
+                //updates other features
+                tableIncrementPktLength.apply();
             }
             else {
                 tableResetPktCount.apply();
-                tableResetByteCount.apply();
+                tableResetPktLength.apply();
+                tableResetIat.apply();
             }
         }
     }
