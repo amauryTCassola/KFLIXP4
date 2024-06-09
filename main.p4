@@ -89,7 +89,7 @@ control MyIngress(inout headers hdr,
     }
 
     apply {
-        if (hdr.ipv4.isValid()) {
+        if (hdr.ipv4.isValid() && hdr.tcp.isValid()) {
 
             hdr.ethernet.etherType = TYPE_FEATURES;
             hdr.features.setValid();
@@ -142,12 +142,20 @@ control MyIngress(inout headers hdr,
                 
                 //updates other features
                 tableIncrementPktLength.apply();
+                tableIncrementFlowDuration.apply();
+                tableIncrementWindowSize.apply();
             }
             else {
+                //If it's a new flow or there has been a hash collision,
+                //reset all the features
                 tableResetPktCount.apply();
                 tableResetPktLength.apply();
                 tableResetIat.apply();
+                tableResetFlowDuration.apply();
+                tableResetWindowSize.apply();
             }
+
+            //Apply the K-Means tables
         }
     }
 }

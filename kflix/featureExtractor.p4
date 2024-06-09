@@ -146,7 +146,6 @@ table tableIncrementPktLength {
 
 
 //IAT ==========================================================
-register<bit<TIMESTAMP_WIDTH>>(HASH_TABLE_ENTRIES) registerFlowStart;
 register<bit<TIMESTAMP_WIDTH>>(HASH_TABLE_ENTRIES) registerLastPktTS;
 
 register<bit<TIMESTAMP_WIDTH>>(HASH_TABLE_ENTRIES) registerSumIat;
@@ -215,7 +214,6 @@ action actionIncrementIat() {
 
 action actionResetIat() {
 
-    registerFlowStart.write(meta.hashKey, standard_metadata.ingress_global_timestamp);
     registerLastPktTS.write(meta.hashKey, standard_metadata.ingress_global_timestamp);
 
     registerSumIat.write(meta.hashKey, 0);
@@ -245,4 +243,142 @@ table tableIncrementIat {
     }
     
     default_action = actionIncrementIat();
+}
+
+//FLOW DURATION ============================================================
+register<bit<TIMESTAMP_WIDTH>>(HASH_TABLE_ENTRIES) registerFlowStart;
+
+action actionResetFlowDuration() {
+    registerFlowStart.write(meta.hashKey, standard_metadata.ingress_global_timestamp);
+
+    hdr.features.flowDuration = 0;
+}
+
+action actionIncrementFlowDuration() {
+    bit<TIMESTAMP_WIDTH> curDuration;
+    bit<TIMESTAMP_WIDTH> flowStart;
+
+    registerFlowStart.read(flowStart, meta.hashKey);
+    curDuration = standard_metadata.ingress_global_timestamp - flowStart;
+
+    hdr.features.flowDuration = (bit<TIMESTAMP_HEADER_WIDTH>)curDuration;
+}
+
+table tableResetFlowDuration {
+    actions = {
+        actionResetFlowDuration();
+    }
+    
+    default_action = actionResetFlowDuration();
+}
+
+table tableIncrementFlowDuration {
+    actions = {
+        actionIncrementFlowDuration();
+    }
+    
+    default_action = actionIncrementFlowDuration();
+}
+
+//TCP WINDOW SIZE ==========================================================
+register<bit<FEATURE_WIDTH>>(HASH_TABLE_ENTRIES) registerInitialWindow;
+
+register<bit<FEATURE_WIDTH>>(HASH_TABLE_ENTRIES) registerSumWindow;
+register<bit<FEATURE_WIDTH>>(HASH_TABLE_ENTRIES) registerMaxWindow;
+register<bit<FEATURE_WIDTH>>(HASH_TABLE_ENTRIES) registerMinWindow;
+register<bit<FEATURE_WIDTH>>(HASH_TABLE_ENTRIES) registerWindowApproxMean;
+register<bit<FEATURE_WIDTH>>(HASH_TABLE_ENTRIES) registerWindowApproxSum;
+
+action actionResetWindowSize() {
+    bit<FEATURE_WIDTH> curWindow = (bit<FEATURE_WIDTH>)hdr.tcp.windowSize;
+
+    registerInitialWindow.write(meta.hashKey, curWindow);
+
+    registerSumWindow.write(meta.hashKey, curWindow);
+    registerMaxWindow.write(meta.hashKey, curWindow);
+    registerMinWindow.write(meta.hashKey, curWindow);
+    registerWindowApproxMean.write(meta.hashKey, curWindow);
+    registerWindowApproxSum.write(meta.hashKey, curWindow);
+
+    hdr.features.windowFeatures.initialWindowSize = curWindow;
+    hdr.features.windowFeatures.sumWindowSize = curWindow;
+    hdr.features.windowFeatures.maxWindowSize = curWindow;
+    hdr.features.windowFeatures.minWindowSize = curWindow;
+    hdr.features.windowFeatures.windowSizeApproxSum = curWindow;
+    hdr.features.windowFeatures.windowSizeApproxMean = curWindow;
+}
+
+action actionIncrementWindowSize() {
+    bit<FEATURE_WIDTH> initialWindow;
+    bit<FEATURE_WIDTH> curWindow;
+    bit<FEATURE_WIDTH> windowSum;
+    bit<FEATURE_WIDTH> windowMax;
+    bit<FEATURE_WIDTH> windowMin;
+    bit<FEATURE_WIDTH> windowApproxSum;
+    bit<FEATURE_WIDTH> windowApproxMean;
+
+    registerInitialWindow.read(initialWindow, meta.hashKey);
+    hdr.features.windowFeatures.initialWindowSize = initialWindow;
+
+    registerSumWindow.read(windowSum, meta.hashKey);
+    registerMaxWindow.read(windowMax, meta.hashKey);
+    registerMinWindow.read(windowMin, meta.hashKey);
+    registerWindowApproxSum.read(windowApproxSum, meta.hashKey);
+    registerWindowApproxMean.read(windowApproxMean, meta.hashKey);
+
+    curWindow = (bit<FEATURE_WIDTH>)hdr.tcp.windowSize;
+
+    windowSum = curWindow + windowSum;
+    registerSumWindow.write(meta.hashKey, windowSum);
+    hdr.features.windowFeatures.sumWindowSize = windowSum;
+    
+    bit<FEATURE_WIDTH> update_value;
+    if(curWindow > windowMax){
+        update_value = curWindow;
+    } else {
+        update_value = windowMax;
+    }
+    registerMaxWindow.write(meta.hashKey, update_value);
+    hdr.features.windowFeatures.maxWindowSize = update_value;
+
+    if(curWindow < windowMin){
+        update_value = curWindow;
+    } else {
+        update_value = windowMin;
+    }
+    registerMinWindow.write(meta.hashKey, update_value);
+    hdr.features.windowFeatures.minWindowSize = update_value;
+
+    approximate_mean(
+        (bit<TIMESTAMP_WIDTH>)windowSum, 
+        (bit<TIMESTAMP_WIDTH>)windowApproxSum, 
+        (bit<TIMESTAMP_WIDTH>)windowApproxMean, 
+        (bit<TIMESTAMP_WIDTH>)curWindow
+    );
+
+    windowApproxSum = (bit<FEATURE_WIDTH>)meta.return_approx_sum;
+    windowApproxMean = (bit<FEATURE_WIDTH>)meta.return_approx_mean;
+
+    registerWindowApproxSum.write(meta.hashKey, windowApproxSum);
+    registerWindowApproxMean.write(meta.hashKey, windowApproxMean);
+
+    hdr.features.windowFeatures.windowSizeApproxSum = windowApproxSum;
+    hdr.features.windowFeatures.windowSizeApproxMean = windowApproxMean;
+
+}
+
+table tableResetWindowSize {
+    actions = {
+        actionResetWindowSize();
+    }
+    
+    default_action = actionResetWindowSize();
+}
+
+table tableIncrementWindowSize {
+    actions = {
+        actionIncrementWindowSize();
+    }
+    
+    default_action = actionIncrementWindowSize();
 }

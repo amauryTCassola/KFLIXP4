@@ -55,7 +55,7 @@ header tcp_t {
     bit<3>  res;
     bit<3>  ecn;
     bit<6>  ctrl;
-    bit<16> window;
+    bit<16> windowSize;
     bit<16> checksum;
     bit<16> urgentPtr;
 }
@@ -76,10 +76,21 @@ struct iat_t {
     bit<TIMESTAMP_HEADER_WIDTH> iatApproxMean;
 }
 
+struct tcpWindow_t {
+    bit<FEATURE_WIDTH> initialWindowSize;
+    bit<FEATURE_WIDTH> sumWindowSize;
+    bit<FEATURE_WIDTH> maxWindowSize;
+    bit<FEATURE_WIDTH> minWindowSize;
+    bit<FEATURE_WIDTH> windowSizeApproxSum;
+    bit<FEATURE_WIDTH> windowSizeApproxMean;
+}
+
 header features_t {
     bit<FEATURE_WIDTH> pktCount;
     pktLen_t pktLenFeatures;
     iat_t iatFeatures;
+    tcpWindow_t windowFeatures;
+    bit<TIMESTAMP_HEADER_WIDTH> flowDuration;
     bit<16> etherType;
 }
 

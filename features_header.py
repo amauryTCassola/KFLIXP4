@@ -22,6 +22,15 @@ class Features(Packet):
         LongField("iatApproxSum", 0),
         LongField("iatApproxMean", 0),
 
+        IntField("initialWindowSize", 0),
+        IntField("sumWindowSize", 0),
+        IntField("maxWindowSize", 0),
+        IntField("minWindowSize", 0),
+        IntField("windowSizeApproxSum", 0),
+        IntField("windowSizeApproxMean", 0),
+
+        LongField("flowDuration", 0),
+
         ShortField("etherType", 0)
     ]
     def mysummary(self):
@@ -37,6 +46,13 @@ class Features(Packet):
             minIat=%minIat%, \
             iatApproxSum=%iatApproxSum%, \
             iatApproxMean=%iatApproxMean%, \
+            initialWindowSize=%initialWindowSize%, \
+            sumWindowSize=%sumWindowSize%, \
+            maxWindowSize=%maxWindowSize%, \
+            minWindowSize=%minWindowSize%, \
+            windowSizeApproxSum=%windowSizeApproxSum%, \
+            windowSizeApproxMean=%windowSizeApproxMean%, \
+            flowDuration=%flowDuration%, \
         ")
 
 
