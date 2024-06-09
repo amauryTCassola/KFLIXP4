@@ -63,6 +63,7 @@ control MyIngress(inout headers hdr,
     #include "kflix/approximateMeans.p4"
     #include "kflix/hashFunctions.p4"
     #include "kflix/featureExtractor.p4"
+    #include "kflix/onlineClassifier.p4"
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -155,7 +156,30 @@ control MyIngress(inout headers hdr,
                 tableResetWindowSize.apply();
             }
 
-            //Apply the K-Means tables
+            //Apply the K-Means classifier
+            tableResetDistances.apply();
+
+            tableCalcPktCountDists.apply();
+
+            // tableCalcFlowDurationDists.apply();
+            
+            // tableCalcPktLengthDists.apply();
+            // tableCalcMaxPktLengthDists.apply();
+            // tableCalcMinPktLengthDists.apply();
+            // tableCalcMeanPktLengthDists.apply();
+
+            // tableCalcIATDists.apply();
+            // tableCalcMaxIATDists.apply();
+            // tableCalcMinIATDists.apply();
+            // tableCalcMeanIATDists.apply();
+
+            // tableCalcWindowDists.apply();
+            // tableCalcInitialWindowDists.apply();
+            // tableCalcMaxWindowDists.apply();
+            // tableCalcMinWindowDists.apply();
+            // tableCalcMeanWindowDists.apply();
+
+            tableClassifier.apply();
         }
     }
 }

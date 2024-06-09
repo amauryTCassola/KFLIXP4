@@ -91,6 +91,8 @@ header features_t {
     iat_t iatFeatures;
     tcpWindow_t windowFeatures;
     bit<TIMESTAMP_HEADER_WIDTH> flowDuration;
+    bit<16> isVideo;
+    bit<16> cluster;
     bit<16> etherType;
 }
 

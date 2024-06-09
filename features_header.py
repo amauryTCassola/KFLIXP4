@@ -31,6 +31,9 @@ class Features(Packet):
 
         LongField("flowDuration", 0),
 
+        BitField("isVideo", 0, 8),
+        BitField("cluster", 0, 8),
+
         ShortField("etherType", 0)
     ]
     def mysummary(self):
@@ -53,6 +56,8 @@ class Features(Packet):
             windowSizeApproxSum=%windowSizeApproxSum%, \
             windowSizeApproxMean=%windowSizeApproxMean%, \
             flowDuration=%flowDuration%, \
+            isVideo=%isVideo%, \
+            cluster=%cluster%, \
         ")
 
 
