@@ -247,10 +247,12 @@ table tableIncrementIat {
 
 //FLOW DURATION ============================================================
 register<bit<TIMESTAMP_WIDTH>>(HASH_TABLE_ENTRIES) registerFlowStart;
+register<bit<TIMESTAMP_WIDTH>>(HASH_TABLE_ENTRIES) registerFlowDuration;
 
 action actionResetFlowDuration() {
     registerFlowStart.write(meta.hashKey, standard_metadata.ingress_global_timestamp);
 
+    registerFlowDuration.write(meta.hashKey, 0);
     hdr.features.flowDuration = 0;
 }
 
@@ -261,6 +263,7 @@ action actionIncrementFlowDuration() {
     registerFlowStart.read(flowStart, meta.hashKey);
     curDuration = standard_metadata.ingress_global_timestamp - flowStart;
 
+    registerFlowDuration.write(meta.hashKey, curDuration);
     hdr.features.flowDuration = (bit<TIMESTAMP_HEADER_WIDTH>)curDuration;
 }
 
