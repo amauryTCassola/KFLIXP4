@@ -1,3 +1,21 @@
+features = [
+    "PktCount",
+    "SumPktLength",
+    "MaxPktLength",
+    "MinPktLength",
+    "MeanPktLength",
+    "SumIat",
+    "MaxIat",
+    "MinIat",
+    "MeanIat",
+    "FlowDuration",
+    "InitialWindow",
+    "SumWindow",
+    "MaxWindow",
+    "MinWindow",
+    "MeanWindow"
+]
+
 clusters = [
     {
         "PktCount":0,
@@ -19,7 +37,7 @@ clusters = [
     },
     {
         "PktCount":5,
-        "PktLength":5,
+        "SumPktLength":5,
         "MaxPktLength":5,
         "MinPktLength":5,
         "MeanPktLength":5,
@@ -37,7 +55,7 @@ clusters = [
     },
     {
         "PktCount":20,
-        "PktLength":20,
+        "SumPktLength":20,
         "MaxPktLength":20,
         "MinPktLength":20,
         "MeanPktLength":20,
@@ -55,7 +73,7 @@ clusters = [
     },
     {
         "PktCount":15,
-        "PktLength":15,
+        "SumPktLength":15,
         "MaxPktLength":15,
         "MinPktLength":15,
         "MeanPktLength":15,
@@ -74,23 +92,8 @@ clusters = [
     
 ]
 
-features = [
-    "PktCount",
-    "PktLength",
-    "MaxPktLength",
-    "MinPktLength",
-    "MeanPktLength",
-    "SumIat",
-    "MaxIat",
-    "MinIat",
-    "MeanIat",
-    "FlowDuration",
-    "InitialWindow",
-    "SumWindow",
-    "MaxWindow",
-    "MinWindow",
-    "MeanWindow"
-]
+
+import json
 
 def write(file, string):
     file.write(string+"\n")
@@ -227,7 +230,7 @@ def writeFeatureCalcs(file):
         writeFeatureCalcTable(file, feature)
 
 def createOnlineClassifier():
-    classifier = open("onlineClassifier.p4", "w")
+    classifier = open("kflix/onlineClassifier.p4", "w")
     clusterNumber = len(clusters)
     write(classifier, '#define CLUSTER_NUMBER '+str(clusterNumber))
     write(classifier, "register<bit<TIMESTAMP_WIDTH>>(CLUSTER_NUMBER) registerDistances;")
@@ -238,5 +241,116 @@ def createOnlineClassifier():
 
     classifier.close()
 
+def getIpForwardingEntries(dictionary):
+    dictionary["table_entries"] = [
+        {
+        "table": "MyIngress.ipv4_lpm",
+        "default_action": True,
+        "action_name": "MyIngress.drop",
+        "action_params": { }
+      },
+      {
+        "table": "MyIngress.ipv4_lpm",
+        "match": {
+          "hdr.ipv4.dstAddr": ["10.0.1.1", 32]
+        },
+        "action_name": "MyIngress.ipv4_forward",
+        "action_params": {
+          "dstAddr": "08:00:00:00:01:11",
+          "port": 1
+        }
+      },
+      {
+        "table": "MyIngress.ipv4_lpm",
+        "match": {
+          "hdr.ipv4.dstAddr": ["10.0.2.2", 32]
+        },
+        "action_name": "MyIngress.ipv4_forward",
+        "action_params": {
+          "dstAddr": "08:00:00:00:02:22",
+          "port": 2
+        }
+      },
+      {
+        "table": "MyIngress.ipv4_lpm",
+        "match": {
+          "hdr.ipv4.dstAddr": ["10.0.3.3", 32]
+        },
+        "action_name": "MyIngress.ipv4_forward",
+        "action_params": {
+          "dstAddr": "08:00:00:00:03:00",
+          "port": 3
+        }
+      },
+      {
+        "table": "MyIngress.ipv4_lpm",
+        "match": {
+          "hdr.ipv4.dstAddr": ["10.0.4.4", 32]
+        },
+        "action_name": "MyIngress.ipv4_forward",
+        "action_params": {
+          "dstAddr": "08:00:00:00:04:00",
+          "port": 4
+        }
+      }
+    ]
+
+def getFeatureEntries(feature, dictionary):
+    paramsDict = {}
+    
+    tableName = "MyIngress.tableCalc"+feature+"Dists"
+    actionName = "MyIngress.actionCalc"+feature+"Dists"
+
+    for clusterIndex in range(len(clusters)):
+        paramsDict["cluster"+str(clusterIndex)] = clusters[clusterIndex][feature]
+
+    dict = {
+        "table": tableName,
+        "action_name": actionName,
+        "action_params": paramsDict,
+        "priority": 1
+      },
+
+    dictionary["table_entries"] += dict
+
+def getClassifierEntry(dictionary):
+    paramsDict = {}
+
+    for clusterIndex in range(len(clusters)):
+        paramsDict["cluster"+str(clusterIndex)] = clusters[clusterIndex]["isVideo"]
+
+    classifyDict = {
+        "table": "MyIngress.tableClassify",
+        "action_name": "MyIngress.actionClassify",
+        "action_params": paramsDict,
+        "priority": 1
+      },
+
+    dictionary["table_entries"] += classifyDict
+
+def getTableEntriesDictionary():
+    dictionary = {
+        "target": "bmv2",
+        "p4info": "build/main.p4.p4info.txt",
+        "bmv2_json": "build/main.json",
+        "table_entries": []
+    }
+
+    getIpForwardingEntries(dictionary)
+
+    for feature in features:
+        getFeatureEntries(feature, dictionary)
+        
+    getClassifierEntry(dictionary)
+
+    return dictionary
+
+def createTableEntries():
+    runtime = open("kflix/s1-runtime.json", "w")
+    dictionary = getTableEntriesDictionary()
+    json_object = json.dumps(dictionary, indent=4)
+    runtime.write(json_object)
+
 if __name__ == '__main__':
     createOnlineClassifier()
+    createTableEntries()

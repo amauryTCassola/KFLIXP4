@@ -1,0 +1,245 @@
+{
+    "target": "bmv2",
+    "p4info": "build/main.p4.p4info.txt",
+    "bmv2_json": "build/main.json",
+    "table_entries": [
+        {
+            "table": "MyIngress.ipv4_lpm",
+            "default_action": true,
+            "action_name": "MyIngress.drop",
+            "action_params": {}
+        },
+        {
+            "table": "MyIngress.ipv4_lpm",
+            "match": {
+                "hdr.ipv4.dstAddr": [
+                    "10.0.1.1",
+                    32
+                ]
+            },
+            "action_name": "MyIngress.ipv4_forward",
+            "action_params": {
+                "dstAddr": "08:00:00:00:01:11",
+                "port": 1
+            }
+        },
+        {
+            "table": "MyIngress.ipv4_lpm",
+            "match": {
+                "hdr.ipv4.dstAddr": [
+                    "10.0.2.2",
+                    32
+                ]
+            },
+            "action_name": "MyIngress.ipv4_forward",
+            "action_params": {
+                "dstAddr": "08:00:00:00:02:22",
+                "port": 2
+            }
+        },
+        {
+            "table": "MyIngress.ipv4_lpm",
+            "match": {
+                "hdr.ipv4.dstAddr": [
+                    "10.0.3.3",
+                    32
+                ]
+            },
+            "action_name": "MyIngress.ipv4_forward",
+            "action_params": {
+                "dstAddr": "08:00:00:00:03:00",
+                "port": 3
+            }
+        },
+        {
+            "table": "MyIngress.ipv4_lpm",
+            "match": {
+                "hdr.ipv4.dstAddr": [
+                    "10.0.4.4",
+                    32
+                ]
+            },
+            "action_name": "MyIngress.ipv4_forward",
+            "action_params": {
+                "dstAddr": "08:00:00:00:04:00",
+                "port": 4
+            }
+        },
+        {
+            "table": "MyIngress.tableCalcPktCountDists",
+            "action_name": "MyIngress.actionCalcPktCountDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcSumPktLengthDists",
+            "action_name": "MyIngress.actionCalcSumPktLengthDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMaxPktLengthDists",
+            "action_name": "MyIngress.actionCalcMaxPktLengthDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMinPktLengthDists",
+            "action_name": "MyIngress.actionCalcMinPktLengthDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMeanPktLengthDists",
+            "action_name": "MyIngress.actionCalcMeanPktLengthDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcSumIatDists",
+            "action_name": "MyIngress.actionCalcSumIatDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMaxIatDists",
+            "action_name": "MyIngress.actionCalcMaxIatDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMinIatDists",
+            "action_name": "MyIngress.actionCalcMinIatDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMeanIatDists",
+            "action_name": "MyIngress.actionCalcMeanIatDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcFlowDurationDists",
+            "action_name": "MyIngress.actionCalcFlowDurationDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcInitialWindowDists",
+            "action_name": "MyIngress.actionCalcInitialWindowDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcSumWindowDists",
+            "action_name": "MyIngress.actionCalcSumWindowDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMaxWindowDists",
+            "action_name": "MyIngress.actionCalcMaxWindowDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMinWindowDists",
+            "action_name": "MyIngress.actionCalcMinWindowDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcMeanWindowDists",
+            "action_name": "MyIngress.actionCalcMeanWindowDists",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 5,
+                "cluster2": 20,
+                "cluster3": 15
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableClassify",
+            "action_name": "MyIngress.actionClassify",
+            "action_params": {
+                "cluster0": 0,
+                "cluster1": 1,
+                "cluster2": 0,
+                "cluster3": 1
+            },
+            "priority": 1
+        }
+    ]
+}

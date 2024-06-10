@@ -161,23 +161,23 @@ control MyIngress(inout headers hdr,
 
             tableCalcPktCountDists.apply();
 
-            // tableCalcFlowDurationDists.apply();
+            tableCalcFlowDurationDists.apply();
             
-            // tableCalcPktLengthDists.apply();
-            // tableCalcMaxPktLengthDists.apply();
-            // tableCalcMinPktLengthDists.apply();
-            // tableCalcMeanPktLengthDists.apply();
+            tableCalcSumPktLengthDists.apply();
+            tableCalcMaxPktLengthDists.apply();
+            tableCalcMinPktLengthDists.apply();
+            tableCalcMeanPktLengthDists.apply();
 
-            // tableCalcIATDists.apply();
-            // tableCalcMaxIATDists.apply();
-            // tableCalcMinIATDists.apply();
-            // tableCalcMeanIATDists.apply();
+            tableCalcSumIatDists.apply();
+            tableCalcMaxIatDists.apply();
+            tableCalcMinIatDists.apply();
+            tableCalcMeanIatDists.apply();
 
-            // tableCalcWindowDists.apply();
-            // tableCalcInitialWindowDists.apply();
-            // tableCalcMaxWindowDists.apply();
-            // tableCalcMinWindowDists.apply();
-            // tableCalcMeanWindowDists.apply();
+            tableCalcWindowDists.apply();
+            tableCalcInitialWindowDists.apply();
+            tableCalcMaxWindowDists.apply();
+            tableCalcMinWindowDists.apply();
+            tableCalcMeanWindowDists.apply();
 
             tableClassifier.apply();
         }
