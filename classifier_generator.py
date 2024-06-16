@@ -351,6 +351,16 @@ def createTableEntries():
     json_object = json.dumps(dictionary, indent=4)
     runtime.write(json_object)
 
+def createNormalizeIf():
+    file = open("normalize.p4", "w")
+    for i in range(0, 24):
+        writeLines(file, [
+            "if(divisor_mask & (bit<DIV_MASK_WIDTH>)"+str(2**i)+" != zero){",
+            "\tnormalized_feature = normalized_feature + (shifted_dividend >> "+str(i+1)+");",
+            "}"
+        ])
+
 if __name__ == '__main__':
-    createOnlineClassifier()
-    createTableEntries()
+    #createOnlineClassifier()
+    #createTableEntries()
+    createNormalizeIf()
