@@ -11,11 +11,8 @@
 
 #define SHIFT_AMOUNT_WIDTH 4
 
-#define SHIFTED_FEATURE_WIDTH 42
 #define SHIFTED_TIMESTAMP_WIDTH 48
-
 #define NORMALIZED_WIDTH 10
-#define DIV_MASK_WIDTH 24
 
 #define BOOLEAN 1
 
@@ -125,4 +122,5 @@ struct metadata {
     bit<TIMESTAMP_WIDTH>        return_approx_sum;
     bit<TIMESTAMP_WIDTH>        return_approx_mean;
 
+    bit<NORMALIZED_WIDTH> return_normalize;
 }

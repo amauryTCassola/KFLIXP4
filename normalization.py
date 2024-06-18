@@ -58,7 +58,7 @@ def calculation(accuracy = 10):
         print("|"+value+"\t|"+normalized+"\t|"+normalizedShifted+"\t|"+approxNorm+"\t|"+error)
 
 
-print(get_rec_powers_of_2(1/96))
+print(get_rec_powers_of_2(1/9500))
 
 exit()
 divRec = 1/divisor

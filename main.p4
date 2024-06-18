@@ -60,6 +60,7 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
+    #include "kflix/normalize.p4"
     #include "kflix/approximateMeans.p4"
     #include "kflix/hashFunctions.p4"
     #include "kflix/featureExtractor.p4"

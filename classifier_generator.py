@@ -1,19 +1,66 @@
 features = [
-    "PktCount",
-    "SumPktLength",
-    "MaxPktLength",
-    "MinPktLength",
-    "MeanPktLength",
-    "SumIat",
-    "MaxIat",
-    "MinIat",
-    "MeanIat",
-    "FlowDuration",
-    "InitialWindow",
-    "SumWindow",
-    "MaxWindow",
-    "MinWindow",
-    "MeanWindow"
+    {
+        "name": "PktCount",
+        "min": 0,
+        "divisor_mask": 5592384
+    },
+    {
+        "name": "SumPktLength",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MaxPktLength",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MinPktLength",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MeanPktLength",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "SumIat",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MaxIat",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MinIat",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MeanIat",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "FlowDuration",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "InitialWindow",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "SumWindow",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MaxWindow",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MinWindow",
+        "min": 0,
+        "divisor_mask": 5592384
+    },{
+        "name": "MeanWindow",
+        "min": 0,
+        "divisor_mask": 5592384
+    },
 ]
 
 clusters = [
@@ -112,7 +159,7 @@ def writeResetDistances(file):
     writeLines(file, [
         "table tableResetDistances {",
             "\tactions = {",
-                "\t\tctionResetDistances();",
+                "\t\tactionResetDistances();",
             "\t}",
             "\tdefault_action = actionResetDistances();",
         "}"
@@ -173,6 +220,13 @@ def writeClassify(file):
 
     write(file, "}")
 
+    defaultCall = "actionClassify("
+    for i in range(len(clusters)):
+        if i is not len(clusters)-1:
+            defaultCall = defaultCall+"0,"
+        else:
+            defaultCall = defaultCall+"0);"
+
     writeLines(file, [
         "table tableClassifier {",
            "\tactions = {",
@@ -181,53 +235,76 @@ def writeClassify(file):
             "\tkey = {",
                 "\t\tmeta.pktCount: ternary;",
             "\t}",
-            "\tdefault_action = actionClassify(0,0,0,0,0,0,0,0,0,0);",
+            "\tdefault_action = "+defaultCall,
         "}"
     ])
 
 def writeFeatureCalcAction(file, feature):
     write(file, "action actionCalc"+feature+"Dists(")
     for index in range(len(clusters)):
-        if index is not len(clusters)-1:
-            write(file, "\tbit<TIMESTAMP_WIDTH> cluster"+str(index)+",")
-        else:
-            write(file, "\tbit<TIMESTAMP_WIDTH> cluster"+str(index))
+        write(file, "\tbit<NORMALIZED_WIDTH> cluster"+str(index)+",")
+
+    writeLines(file, [
+        "\tbit<TIMESTAMP_WIDTH> min_feature,",
+        "\tbit<DIV_MASK_WIDTH> divisor_mask",
+    ])
 
     writeLines(file, [
         ") {",
+        "",
         "\tbit<FEATURE_WIDTH> feature;",
         "\tregister"+feature+".read(feature, meta.hashKey);",
         "\tbit<TIMESTAMP_WIDTH> featPadded;",
-        "\tfeatPadded = (bit<TIMESTAMP_WIDTH>) feature;"
+        "\tfeatPadded = (bit<TIMESTAMP_WIDTH>) feature;",
+        "",
+    ])
+
+    writeLines(file, [
+        "\tnormalize(featPadded, min_feature, divisor_mask);",
+        "",
+        "\tbit<NORMALIZED_WIDTH> normalized_feature;",
+        "\tnormalized_feature = meta.return_normalize;",
+        "",
     ])
 
     for index in range(len(clusters)):
         writeLines(file, [
             "\tbit<TIMESTAMP_WIDTH> clus"+str(index)+"Dist;",
             "\tregisterDistances.read(clus"+str(index)+"Dist, "+str(index)+");",
-            "\tclus"+str(index)+"Dist = clus"+str(index)+"Dist + ((featPadded - cluster"+str(index)+")*(featPadded - cluster"+str(index)+"));",
-            "\tregisterDistances.write("+str(index)+", clus"+str(index)+"Dist);\n\n"
+            "\tclus"+str(index)+"Dist = clus"+str(index)+"Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster"+str(index)+")*(normalized_feature - cluster"+str(index)+"));",
+            "\tregisterDistances.write("+str(index)+", clus"+str(index)+"Dist);\n\n",
         ])
 
     write(file, "}")
 
 def writeFeatureCalcTable(file, feature):
+
+    tableName = "tableCalc"+feature+"Dists"
+    actionName = "actionCalc"+feature+"Dists"
+    defaultCall = "("
+
+    for i in range(len(clusters)):
+        defaultCall = defaultCall+"0,"
+
+    defaultCall = defaultCall + "0,0)"
+
+
     writeLines(file, [
-        "table tableCalc"+feature+"Dists {",
+        "table "+tableName+" {",
         "\tactions = {",
-        "\t\tactionCalc"+feature+"Dists;",
+        "\t\t"+actionName+";",
         "\t}",
         "\tkey = {",
         "\t\tmeta.pktCount: ternary;",
         "\t}",
-        "\tdefault_action = actionCalc"+feature+"Dists(0,0,0,0,0,0,0,0,0,0);",
+        "\tdefault_action = "+actionName+defaultCall+";",
         "}"
     ])
 
 def writeFeatureCalcs(file):
     for feature in features:
-        writeFeatureCalcAction(file, feature)
-        writeFeatureCalcTable(file, feature)
+        writeFeatureCalcAction(file, feature["name"])
+        writeFeatureCalcTable(file, feature["name"])
 
 def createOnlineClassifier():
     classifier = open("kflix/onlineClassifier.p4", "w")
@@ -297,12 +374,16 @@ def getIpForwardingEntries(dictionary):
 
 def getFeatureEntries(feature, dictionary):
     paramsDict = {}
+    featureName = feature["name"]
     
-    tableName = "MyIngress.tableCalc"+feature+"Dists"
-    actionName = "MyIngress.actionCalc"+feature+"Dists"
+    tableName = "MyIngress.tableCalc"+featureName+"Dists"
+    actionName = "MyIngress.actionCalc"+featureName+"Dists"
 
     for clusterIndex in range(len(clusters)):
-        paramsDict["cluster"+str(clusterIndex)] = clusters[clusterIndex][feature]
+        paramsDict["cluster"+str(clusterIndex)] = clusters[clusterIndex][featureName]
+
+    paramsDict["min_feature"] = feature["min"]
+    paramsDict["divisor_mask"] = feature["divisor_mask"]
 
     dict = {
         "table": tableName,
@@ -351,16 +432,6 @@ def createTableEntries():
     json_object = json.dumps(dictionary, indent=4)
     runtime.write(json_object)
 
-def createNormalizeIf():
-    file = open("normalize.p4", "w")
-    for i in range(0, 24):
-        writeLines(file, [
-            "if(divisor_mask & (bit<DIV_MASK_WIDTH>)"+str(2**i)+" != zero){",
-            "\tnormalized_feature = normalized_feature + (shifted_dividend >> "+str(i+1)+");",
-            "}"
-        ])
-
 if __name__ == '__main__':
-    #createOnlineClassifier()
-    #createTableEntries()
-    createNormalizeIf()
+    createOnlineClassifier()
+    createTableEntries()

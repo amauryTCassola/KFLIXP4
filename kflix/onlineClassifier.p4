@@ -9,7 +9,7 @@ action actionResetDistances() {
 
 table tableResetDistances {
 	actions = {
-		ctionResetDistances();
+		actionResetDistances();
 	}
 	default_action = actionResetDistances();
 }
@@ -64,39 +64,48 @@ table tableClassifier {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionClassify(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionClassify(0,0,0,0);
 }
 action actionCalcPktCountDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerPktCount.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -108,39 +117,48 @@ table tableCalcPktCountDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcPktCountDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcPktCountDists(0,0,0,0,0,0);
 }
 action actionCalcSumPktLengthDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerSumPktLength.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -152,39 +170,48 @@ table tableCalcSumPktLengthDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcSumPktLengthDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcSumPktLengthDists(0,0,0,0,0,0);
 }
 action actionCalcMaxPktLengthDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMaxPktLength.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -196,39 +223,48 @@ table tableCalcMaxPktLengthDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMaxPktLengthDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMaxPktLengthDists(0,0,0,0,0,0);
 }
 action actionCalcMinPktLengthDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMinPktLength.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -240,39 +276,48 @@ table tableCalcMinPktLengthDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMinPktLengthDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMinPktLengthDists(0,0,0,0,0,0);
 }
 action actionCalcMeanPktLengthDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMeanPktLength.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -284,39 +329,48 @@ table tableCalcMeanPktLengthDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMeanPktLengthDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMeanPktLengthDists(0,0,0,0,0,0);
 }
 action actionCalcSumIatDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerSumIat.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -328,39 +382,48 @@ table tableCalcSumIatDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcSumIatDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcSumIatDists(0,0,0,0,0,0);
 }
 action actionCalcMaxIatDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMaxIat.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -372,39 +435,48 @@ table tableCalcMaxIatDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMaxIatDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMaxIatDists(0,0,0,0,0,0);
 }
 action actionCalcMinIatDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMinIat.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -416,39 +488,48 @@ table tableCalcMinIatDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMinIatDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMinIatDists(0,0,0,0,0,0);
 }
 action actionCalcMeanIatDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMeanIat.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -460,39 +541,48 @@ table tableCalcMeanIatDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMeanIatDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMeanIatDists(0,0,0,0,0,0);
 }
 action actionCalcFlowDurationDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerFlowDuration.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -504,39 +594,48 @@ table tableCalcFlowDurationDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcFlowDurationDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcFlowDurationDists(0,0,0,0,0,0);
 }
 action actionCalcInitialWindowDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerInitialWindow.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -548,39 +647,48 @@ table tableCalcInitialWindowDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcInitialWindowDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcInitialWindowDists(0,0,0,0,0,0);
 }
 action actionCalcSumWindowDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerSumWindow.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -592,39 +700,48 @@ table tableCalcSumWindowDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcSumWindowDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcSumWindowDists(0,0,0,0,0,0);
 }
 action actionCalcMaxWindowDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMaxWindow.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -636,39 +753,48 @@ table tableCalcMaxWindowDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMaxWindowDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMaxWindowDists(0,0,0,0,0,0);
 }
 action actionCalcMinWindowDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMinWindow.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -680,39 +806,48 @@ table tableCalcMinWindowDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMinWindowDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMinWindowDists(0,0,0,0,0,0);
 }
 action actionCalcMeanWindowDists(
-	bit<TIMESTAMP_WIDTH> cluster0,
-	bit<TIMESTAMP_WIDTH> cluster1,
-	bit<TIMESTAMP_WIDTH> cluster2,
-	bit<TIMESTAMP_WIDTH> cluster3
+	bit<NORMALIZED_WIDTH> cluster0,
+	bit<NORMALIZED_WIDTH> cluster1,
+	bit<NORMALIZED_WIDTH> cluster2,
+	bit<NORMALIZED_WIDTH> cluster3,
+	bit<TIMESTAMP_WIDTH> min_feature,
+	bit<DIV_MASK_WIDTH> divisor_mask
 ) {
+
 	bit<FEATURE_WIDTH> feature;
 	registerMeanWindow.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+
+	normalize(featPadded, min_feature, divisor_mask);
+
+	bit<NORMALIZED_WIDTH> normalized_feature;
+	normalized_feature = meta.return_normalize;
+
 	bit<TIMESTAMP_WIDTH> clus0Dist;
 	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + ((featPadded - cluster0)*(featPadded - cluster0));
+	clus0Dist = clus0Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
 	registerDistances.write(0, clus0Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus1Dist;
 	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + ((featPadded - cluster1)*(featPadded - cluster1));
+	clus1Dist = clus1Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
 	registerDistances.write(1, clus1Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus2Dist;
 	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + ((featPadded - cluster2)*(featPadded - cluster2));
+	clus2Dist = clus2Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
 	registerDistances.write(2, clus2Dist);
 
 
 	bit<TIMESTAMP_WIDTH> clus3Dist;
 	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + ((featPadded - cluster3)*(featPadded - cluster3));
+	clus3Dist = clus3Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
 	registerDistances.write(3, clus3Dist);
 
 
@@ -724,5 +859,5 @@ table tableCalcMeanWindowDists {
 	key = {
 		meta.pktCount: ternary;
 	}
-	default_action = actionCalcMeanWindowDists(0,0,0,0,0,0,0,0,0,0);
+	default_action = actionCalcMeanWindowDists(0,0,0,0,0,0);
 }

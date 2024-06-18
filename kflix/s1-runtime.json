@@ -72,7 +72,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -83,7 +85,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -94,7 +98,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -105,7 +111,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -116,7 +124,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -127,7 +137,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -138,7 +150,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -149,7 +163,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -160,7 +176,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -171,7 +189,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -182,7 +202,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -193,7 +215,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -204,7 +228,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -215,7 +241,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
@@ -226,7 +254,9 @@
                 "cluster0": 0,
                 "cluster1": 5,
                 "cluster2": 20,
-                "cluster3": 15
+                "cluster3": 15,
+                "min_feature": 0,
+                "divisor_mask": 5592384
             },
             "priority": 1
         },
