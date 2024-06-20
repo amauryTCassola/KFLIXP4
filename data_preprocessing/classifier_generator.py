@@ -1,145 +1,3 @@
-features = [
-    {
-        "name": "PktCount",
-        "min": 0,
-        "divisor_mask": 5592384
-    },
-    {
-        "name": "SumPktLength",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MaxPktLength",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MinPktLength",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MeanPktLength",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "SumIat",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MaxIat",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MinIat",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MeanIat",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "FlowDuration",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "InitialWindow",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "SumWindow",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MaxWindow",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MinWindow",
-        "min": 0,
-        "divisor_mask": 5592384
-    },{
-        "name": "MeanWindow",
-        "min": 0,
-        "divisor_mask": 5592384
-    },
-]
-
-clusters = [
-    {
-        "PktCount":0,
-        "SumPktLength":0,
-        "MaxPktLength":0,
-        "MinPktLength":0,
-        "MeanPktLength":0,
-        "SumIat":0,
-        "MaxIat":0,
-        "MinIat":0,
-        "MeanIat":0,
-        "FlowDuration":0,
-        "InitialWindow":0,
-        "SumWindow":0,
-        "MaxWindow":0,
-        "MinWindow":0,
-        "MeanWindow":0,
-        "isVideo": 0,
-    },
-    {
-        "PktCount":5,
-        "SumPktLength":5,
-        "MaxPktLength":5,
-        "MinPktLength":5,
-        "MeanPktLength":5,
-        "SumIat":5,
-        "MaxIat":5,
-        "MinIat":5,
-        "MeanIat":5,
-        "FlowDuration":5,
-        "InitialWindow":5,
-        "SumWindow":5,
-        "MaxWindow":5,
-        "MinWindow":5,
-        "MeanWindow":5,
-        "isVideo": 1,
-    },
-    {
-        "PktCount":20,
-        "SumPktLength":20,
-        "MaxPktLength":20,
-        "MinPktLength":20,
-        "MeanPktLength":20,
-        "SumIat":20,
-        "MaxIat":20,
-        "MinIat":20,
-        "MeanIat":20,
-        "FlowDuration":20,
-        "InitialWindow":20,
-        "SumWindow":20,
-        "MaxWindow":20,
-        "MinWindow":20,
-        "MeanWindow":20,
-        "isVideo": 0,
-    },
-    {
-        "PktCount":15,
-        "SumPktLength":15,
-        "MaxPktLength":15,
-        "MinPktLength":15,
-        "MeanPktLength":15,
-        "SumIat":15,
-        "MaxIat":15,
-        "MinIat":15,
-        "MeanIat":15,
-        "FlowDuration":15,
-        "InitialWindow":15,
-        "SumWindow":15,
-        "MaxWindow":15,
-        "MinWindow":15,
-        "MeanWindow":15,
-        "isVideo": 1,
-    },
-    
-]
-
-
 import json
 
 def write(file, string):
@@ -307,7 +165,7 @@ def writeFeatureCalcs(file):
         writeFeatureCalcTable(file, feature["name"])
 
 def createOnlineClassifier():
-    classifier = open("kflix/onlineClassifier.p4", "w")
+    classifier = open("onlineClassifier.p4", "w")
     clusterNumber = len(clusters)
     write(classifier, '#define CLUSTER_NUMBER '+str(clusterNumber))
     write(classifier, "register<bit<TIMESTAMP_WIDTH>>(CLUSTER_NUMBER) registerDistances;")
@@ -427,11 +285,15 @@ def getTableEntriesDictionary():
     return dictionary
 
 def createTableEntries():
-    runtime = open("kflix/s1-runtime.json", "w")
+    runtime = open("s1-runtime.json", "w")
     dictionary = getTableEntriesDictionary()
     json_object = json.dumps(dictionary, indent=4)
     runtime.write(json_object)
 
-if __name__ == '__main__':
+def generateClassifier(featureParamsList, centroids):
+    global features
+    features = featureParamsList
+    global clusters 
+    clusters =  centroids
     createOnlineClassifier()
     createTableEntries()

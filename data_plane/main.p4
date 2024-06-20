@@ -1,7 +1,7 @@
 /* -*- P4_16 -*- */
 #include <core.p4>
 #include <v1model.p4>
-#include "kflix/definitions.p4"
+#include "includes/definitions.p4"
 
 parser MyParser(packet_in packet,
                 out headers hdr,
@@ -60,11 +60,11 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
-    #include "kflix/normalize.p4"
-    #include "kflix/approximateMeans.p4"
-    #include "kflix/hashFunctions.p4"
-    #include "kflix/featureExtractor.p4"
-    #include "kflix/onlineClassifier.p4"
+    #include "includes/normalize.p4"
+    #include "includes/approximateMeans.p4"
+    #include "includes/hashFunctions.p4"
+    #include "includes/featureExtractor.p4"
+    #include "includes/onlineClassifier.p4"
 
     action drop() {
         mark_to_drop(standard_metadata);
