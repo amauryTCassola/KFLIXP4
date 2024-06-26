@@ -32,14 +32,20 @@ parser MyParser(packet_in packet,
 
     state parse_ipv4 {
         packet.extract(hdr.ipv4);
-        transition select(hdr.ipv4.protocol) {
-            6: parse_tcp;
+        transition select(hdr.ipv4.protocol){
+            PROTO_TCP: parse_tcp;
+            PROTO_UDP: parse_udp;
             default: accept;
         }
     }
 
-    state parse_tcp {
+    state parse_tcp{
         packet.extract(hdr.tcp);
+        transition accept;
+    }
+
+    state parse_udp{
+        packet.extract(hdr.udp);
         transition accept;
     }
 }
@@ -91,7 +97,7 @@ control MyIngress(inout headers hdr,
     }
 
     apply {
-        if (hdr.ipv4.isValid() && hdr.tcp.isValid()) {
+        if (hdr.ipv4.isValid()) {
 
             hdr.ethernet.etherType = TYPE_FEATURES;
             hdr.features.setValid();
@@ -145,7 +151,10 @@ control MyIngress(inout headers hdr,
                 //updates other features
                 tableIncrementPktLength.apply();
                 tableIncrementFlowDuration.apply();
-                tableIncrementWindowSize.apply();
+
+                if (hdr.tcp.isValid()){
+                    tableIncrementWindowSize.apply();
+                }
             }
             else {
                 //If it's a new flow or there has been a hash collision,
@@ -155,6 +164,7 @@ control MyIngress(inout headers hdr,
                 tableResetIat.apply();
                 tableResetFlowDuration.apply();
                 tableResetWindowSize.apply();
+                tableResetIsTCP.apply();
             }
 
             //Apply the K-Means classifier
@@ -163,6 +173,8 @@ control MyIngress(inout headers hdr,
             tableCalcPktCountDists.apply();
 
             tableCalcFlowDurationDists.apply();
+
+            tableCalcIsTCPDists.apply();
             
             tableCalcSumPktLengthDists.apply();
             tableCalcMaxPktLengthDists.apply();

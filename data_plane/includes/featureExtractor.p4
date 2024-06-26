@@ -283,6 +283,27 @@ table tableIncrementFlowDuration {
     default_action = actionIncrementFlowDuration();
 }
 
+//IsTCP ============================================================
+register<bit<1>>(HASH_TABLE_ENTRIES) registerIsTCP;
+
+action actionResetIsTCP() {
+    bit<1> isTCP;
+    if(hdr.tcp.isValid()){
+        isTCP = 1;
+    } else {
+        isTCP = 0;
+    }
+    registerIsTCP.write(meta.hashKey, isTCP);
+}
+
+table tableResetIsTCP {
+    actions = {
+        actionResetIsTCP();
+    }
+    
+    default_action = actionResetIsTCP();
+}
+
 //TCP WINDOW SIZE ==========================================================
 register<bit<FEATURE_WIDTH>>(HASH_TABLE_ENTRIES) registerInitialWindow;
 

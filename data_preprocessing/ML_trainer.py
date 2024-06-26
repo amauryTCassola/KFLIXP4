@@ -2,7 +2,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 import numpy as np
 from classifier_generator import generateClassifier
-from dataset_generator import generate_dataset, get_feature_list
+from data_preprocessing.capture_reader import generate_dataset, get_feature_list
 from normalization import get_normalization_params
 from rich import print
 

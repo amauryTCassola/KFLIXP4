@@ -16,6 +16,9 @@
 
 #define BOOLEAN 1
 
+const bit<8> PROTO_TCP = 0x06;
+const bit<8> PROTO_UDP = 0x11;
+
 const bit<16> TYPE_IPV4 = 0x800;
 const bit<16> TYPE_FEATURES = 0x1212;
 
@@ -63,6 +66,14 @@ header tcp_t {
     bit<16> urgentPtr;
 }
 
+//udp header
+header udp_t{
+    bit<16> srcPort;
+    bit<16> dstPort;
+    bit<16> len;
+    bit<16> checksum;
+}
+
 struct pktLen_t {
     bit<FEATURE_WIDTH> pktLength;
     bit<FEATURE_WIDTH> maxPktLength;
@@ -104,6 +115,7 @@ struct headers {
     features_t  features;
     ipv4_t      ipv4;
     tcp_t       tcp;
+    udp_t       udp;
 }
 
 struct metadata {

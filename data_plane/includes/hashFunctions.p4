@@ -95,9 +95,7 @@ register<protocol_t>(HASH_TABLE_ENTRIES) registerProtocol;
 
 action actionUpdateProtocol() {
     registerProtocol.read(meta.protocol, meta.hashKey);
-    //if (hdr.ipv4.protocol != meta.protocol){
-        registerProtocol.write(meta.hashKey, hdr.ipv4.protocol);
-    //}
+    registerProtocol.write(meta.hashKey, hdr.ipv4.protocol);
 }
 
 table tableUpdateProtocol {
