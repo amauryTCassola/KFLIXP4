@@ -63,4 +63,4 @@ def createNormalizeAction(precision):
     ])
 
 if __name__ == '__main__':
-    createNormalizeAction(24)
+    createNormalizeAction(32)

@@ -16,6 +16,12 @@ action normalize(bit<TIMESTAMP_WIDTH> feature, bit<TIMESTAMP_WIDTH> min_feature,
 		dividend = 0;
 	}
 
+	//if div mask is zero
+	// return normalized_feature + (dividend*mult_factor)
+	//no need to shift << 10 anymore
+	//remember to add mult_factor to tables and stuff
+	//max power is now 32, need to make code for that
+
 	bit<SHIFTED_TIMESTAMP_WIDTH> shifted_dividend;
 	shifted_dividend = dividend << 10;
 
