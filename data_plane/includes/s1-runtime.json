@@ -69,12 +69,16 @@
             "table": "MyIngress.tableCalcPktCountDists",
             "action_name": "MyIngress.actionCalcPktCountDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
-                "min_feature": 0,
-                "divisor_mask": 5592384
+                "cluster0": 12,
+                "cluster1": 1,
+                "cluster2": 1,
+                "cluster3": 3,
+                "cluster4": 19,
+                "cluster5": 0,
+                "cluster6": 14,
+                "min_feature": 1,
+                "divisor_mask": 2070724160,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -82,12 +86,16 @@
             "table": "MyIngress.tableCalcSumPktLengthDists",
             "action_name": "MyIngress.actionCalcSumPktLengthDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
-                "min_feature": 0,
-                "divisor_mask": 5592384
+                "cluster0": 13,
+                "cluster1": 0,
+                "cluster2": 0,
+                "cluster3": 3,
+                "cluster4": 21,
+                "cluster5": 0,
+                "cluster6": 13,
+                "min_feature": 54,
+                "divisor_mask": 2211315712,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -95,12 +103,16 @@
             "table": "MyIngress.tableCalcMaxPktLengthDists",
             "action_name": "MyIngress.actionCalcMaxPktLengthDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
-                "min_feature": 0,
-                "divisor_mask": 5592384
+                "cluster0": 60,
+                "cluster1": 14,
+                "cluster2": 32,
+                "cluster3": 38,
+                "cluster4": 75,
+                "cluster5": 26,
+                "cluster6": 41,
+                "min_feature": 54,
+                "divisor_mask": 2611634704,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -108,12 +120,16 @@
             "table": "MyIngress.tableCalcMinPktLengthDists",
             "action_name": "MyIngress.actionCalcMinPktLengthDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
-                "min_feature": 0,
-                "divisor_mask": 5592384
+                "cluster0": 10,
+                "cluster1": 73,
+                "cluster2": 9,
+                "cluster3": 8,
+                "cluster4": 8,
+                "cluster5": 0,
+                "cluster6": 16,
+                "min_feature": 54,
+                "divisor_mask": 366935499,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -121,12 +137,16 @@
             "table": "MyIngress.tableCalcMeanPktLengthDists",
             "action_name": "MyIngress.actionCalcMeanPktLengthDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
-                "min_feature": 0,
-                "divisor_mask": 5592384
+                "cluster0": 759,
+                "cluster1": 93,
+                "cluster2": 149,
+                "cluster3": 324,
+                "cluster4": 850,
+                "cluster5": 89,
+                "cluster6": 664,
+                "min_feature": 54,
+                "divisor_mask": 1761044153,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -134,12 +154,16 @@
             "table": "MyIngress.tableCalcSumIatDists",
             "action_name": "MyIngress.actionCalcSumIatDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 29,
+                "cluster1": 21,
+                "cluster2": 40,
+                "cluster3": 44,
+                "cluster4": 25,
+                "cluster5": 36,
+                "cluster6": 63,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 994574336,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -147,12 +171,16 @@
             "table": "MyIngress.tableCalcMaxIatDists",
             "action_name": "MyIngress.actionCalcMaxIatDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 63,
+                "cluster1": 14,
+                "cluster2": 96,
+                "cluster3": 80,
+                "cluster4": 46,
+                "cluster5": 88,
+                "cluster6": 46,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 1157758976,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -161,11 +189,15 @@
             "action_name": "MyIngress.actionCalcMinIatDists",
             "action_params": {
                 "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster1": 1,
+                "cluster2": 0,
+                "cluster3": 3,
+                "cluster4": 0,
+                "cluster5": 0,
+                "cluster6": 0,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 2159411200,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -173,12 +205,16 @@
             "table": "MyIngress.tableCalcMeanIatDists",
             "action_name": "MyIngress.actionCalcMeanIatDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 1,
+                "cluster1": 3,
+                "cluster2": 12,
+                "cluster3": 14,
+                "cluster4": 1,
+                "cluster5": 12,
+                "cluster6": 1,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 2159411200,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -186,12 +222,16 @@
             "table": "MyIngress.tableCalcFlowDurationDists",
             "action_name": "MyIngress.actionCalcFlowDurationDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 29,
+                "cluster1": 21,
+                "cluster2": 40,
+                "cluster3": 44,
+                "cluster4": 25,
+                "cluster5": 36,
+                "cluster6": 63,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 994574336,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -199,12 +239,16 @@
             "table": "MyIngress.tableCalcInitialWindowDists",
             "action_name": "MyIngress.actionCalcInitialWindowDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 1001,
+                "cluster1": 0,
+                "cluster2": 1012,
+                "cluster3": 324,
+                "cluster4": 1024,
+                "cluster5": 1018,
+                "cluster6": 0,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 2097184,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -212,12 +256,16 @@
             "table": "MyIngress.tableCalcSumWindowDists",
             "action_name": "MyIngress.actionCalcSumWindowDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 9,
+                "cluster1": 0,
+                "cluster2": 1,
+                "cluster3": 0,
+                "cluster4": 52,
+                "cluster5": 1,
+                "cluster6": 0,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 905969664,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -225,12 +273,16 @@
             "table": "MyIngress.tableCalcMaxWindowDists",
             "action_name": "MyIngress.actionCalcMaxWindowDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 3,
+                "cluster1": 0,
+                "cluster2": 6,
+                "cluster3": 1,
+                "cluster4": 15,
+                "cluster5": 2,
+                "cluster6": 0,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 32768,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -238,12 +290,16 @@
             "table": "MyIngress.tableCalcMinWindowDists",
             "action_name": "MyIngress.actionCalcMinWindowDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 1001,
+                "cluster1": 0,
+                "cluster2": 1012,
+                "cluster3": 291,
+                "cluster4": 0,
+                "cluster5": 0,
+                "cluster6": 0,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 2097184,
+                "mult_factor": 0
             },
             "priority": 1
         },
@@ -251,12 +307,33 @@
             "table": "MyIngress.tableCalcMeanWindowDists",
             "action_name": "MyIngress.actionCalcMeanWindowDists",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 5,
-                "cluster2": 20,
-                "cluster3": 15,
+                "cluster0": 3,
+                "cluster1": 0,
+                "cluster2": 6,
+                "cluster3": 1,
+                "cluster4": 16,
+                "cluster5": 2,
+                "cluster6": 0,
                 "min_feature": 0,
-                "divisor_mask": 5592384
+                "divisor_mask": 1234731008,
+                "mult_factor": 0
+            },
+            "priority": 1
+        },
+        {
+            "table": "MyIngress.tableCalcIsTCPDists",
+            "action_name": "MyIngress.actionCalcIsTCPDists",
+            "action_params": {
+                "cluster0": 1024,
+                "cluster1": 0,
+                "cluster2": 1024,
+                "cluster3": 1024,
+                "cluster4": 1024,
+                "cluster5": 1024,
+                "cluster6": 0,
+                "min_feature": 0,
+                "divisor_mask": 0,
+                "mult_factor": 1024
             },
             "priority": 1
         },
@@ -264,10 +341,13 @@
             "table": "MyIngress.tableClassify",
             "action_name": "MyIngress.actionClassify",
             "action_params": {
-                "cluster0": 0,
-                "cluster1": 1,
+                "cluster0": 1,
+                "cluster1": 0,
                 "cluster2": 0,
-                "cluster3": 1
+                "cluster3": 0,
+                "cluster4": 1,
+                "cluster5": 0,
+                "cluster6": 1
             },
             "priority": 1
         }

@@ -1,18 +1,14 @@
 /* -*- P4_16 -*- */
-#define ETHERTYPE_IPV4 0x0800
-#define ETHERTYPE_TURBOFLOW 0x081A
-
 #define HASH_TABLE_ENTRIES 65536
 #define HASH_TABLE_BIT_WIDTH 32
 
 #define FEATURE_WIDTH 32
 #define TIMESTAMP_WIDTH 48
-#define TIMESTAMP_HEADER_WIDTH 64
 
 #define SHIFT_AMOUNT_WIDTH 4
 
-#define SHIFTED_TIMESTAMP_WIDTH 48
 #define NORMALIZED_WIDTH 10
+#define DISTANCE_WIDTH 24
 
 #define BOOLEAN 1
 
@@ -74,37 +70,8 @@ header udp_t{
     bit<16> checksum;
 }
 
-struct pktLen_t {
-    bit<FEATURE_WIDTH> pktLength;
-    bit<FEATURE_WIDTH> maxPktLength;
-    bit<FEATURE_WIDTH> minPktLength;
-    bit<FEATURE_WIDTH> pktLengthApproxSum;
-    bit<FEATURE_WIDTH> pktLengthApproxMean;
-}
-
-struct iat_t {
-    bit<TIMESTAMP_HEADER_WIDTH> sumIat;
-    bit<TIMESTAMP_HEADER_WIDTH> maxIat;
-    bit<TIMESTAMP_HEADER_WIDTH> minIat;
-    bit<TIMESTAMP_HEADER_WIDTH> iatApproxSum;
-    bit<TIMESTAMP_HEADER_WIDTH> iatApproxMean;
-}
-
-struct tcpWindow_t {
-    bit<FEATURE_WIDTH> initialWindowSize;
-    bit<FEATURE_WIDTH> sumWindowSize;
-    bit<FEATURE_WIDTH> maxWindowSize;
-    bit<FEATURE_WIDTH> minWindowSize;
-    bit<FEATURE_WIDTH> windowSizeApproxSum;
-    bit<FEATURE_WIDTH> windowSizeApproxMean;
-}
-
+//classifier header
 header features_t {
-    bit<FEATURE_WIDTH> pktCount;
-    pktLen_t pktLenFeatures;
-    iat_t iatFeatures;
-    tcpWindow_t windowFeatures;
-    bit<TIMESTAMP_HEADER_WIDTH> flowDuration;
     bit<16> isVideo;
     bit<16> cluster;
     bit<16> etherType;

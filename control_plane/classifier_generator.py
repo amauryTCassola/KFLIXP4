@@ -1,4 +1,6 @@
 import json
+from rich import print
+from normalizer_generator import createNormalizeAction
 
 def write(file, string):
     file.write(string+"\n")
@@ -10,7 +12,7 @@ def writeLines(file, lines):
 def writeResetDistances(file):
     write(file, "action actionResetDistances() {")
     for index in range(len(clusters)):
-        write(file, "\tregisterDistances.write("+str(index)+", (bit<TIMESTAMP_WIDTH>)0);")
+        write(file, "\tregisterDistances.write("+str(index)+", (bit<DISTANCE_WIDTH>)0);")
     
     write(file, "}\n")
 
@@ -68,7 +70,7 @@ def writeClassify(file):
 
     for index in range(len(clusters)):
         writeLines(file, [
-            "\tbit<TIMESTAMP_WIDTH> clus"+str(index)+"Dist;",
+            "\tbit<DISTANCE_WIDTH> clus"+str(index)+"Dist;",
             "\tregisterDistances.read(clus"+str(index)+"Dist, "+str(index)+");"
         ])
 
@@ -105,6 +107,7 @@ def writeFeatureCalcAction(file, feature):
     writeLines(file, [
         "\tbit<TIMESTAMP_WIDTH> min_feature,",
         "\tbit<DIV_MASK_WIDTH> divisor_mask",
+        "\tbit<DIV_MASK_WIDTH> mult_factor",
     ])
 
     writeLines(file, [
@@ -118,7 +121,7 @@ def writeFeatureCalcAction(file, feature):
     ])
 
     writeLines(file, [
-        "\tnormalize(featPadded, min_feature, divisor_mask);",
+        "\tnormalize(featPadded, min_feature, divisor_mask, mult_factor);",
         "",
         "\tbit<NORMALIZED_WIDTH> normalized_feature;",
         "\tnormalized_feature = meta.return_normalize;",
@@ -127,9 +130,9 @@ def writeFeatureCalcAction(file, feature):
 
     for index in range(len(clusters)):
         writeLines(file, [
-            "\tbit<TIMESTAMP_WIDTH> clus"+str(index)+"Dist;",
+            "\tbit<DISTANCE_WIDTH> clus"+str(index)+"Dist;",
             "\tregisterDistances.read(clus"+str(index)+"Dist, "+str(index)+");",
-            "\tclus"+str(index)+"Dist = clus"+str(index)+"Dist + (bit<TIMESTAMP_WIDTH>)((normalized_feature - cluster"+str(index)+")*(normalized_feature - cluster"+str(index)+"));",
+            "\tclus"+str(index)+"Dist = clus"+str(index)+"Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster"+str(index)+")*(normalized_feature - cluster"+str(index)+"));",
             "\tregisterDistances.write("+str(index)+", clus"+str(index)+"Dist);\n\n",
         ])
 
@@ -144,7 +147,7 @@ def writeFeatureCalcTable(file, feature):
     for i in range(len(clusters)):
         defaultCall = defaultCall+"0,"
 
-    defaultCall = defaultCall + "0,0)"
+    defaultCall = defaultCall + "0,0,0)"
 
 
     writeLines(file, [
@@ -168,7 +171,7 @@ def createOnlineClassifier():
     classifier = open("onlineClassifier.p4", "w")
     clusterNumber = len(clusters)
     write(classifier, '#define CLUSTER_NUMBER '+str(clusterNumber))
-    write(classifier, "register<bit<TIMESTAMP_WIDTH>>(CLUSTER_NUMBER) registerDistances;")
+    write(classifier, "register<bit<DISTANCE_WIDTH>>(CLUSTER_NUMBER) registerDistances;")
 
     writeResetDistances(classifier)
     writeClassify(classifier)
@@ -238,10 +241,11 @@ def getFeatureEntries(feature, dictionary):
     actionName = "MyIngress.actionCalc"+featureName+"Dists"
 
     for clusterIndex in range(len(clusters)):
-        paramsDict["cluster"+str(clusterIndex)] = clusters[clusterIndex][featureName]
+        paramsDict["cluster"+str(clusterIndex)] = round(clusters[clusterIndex][featureName])
 
-    paramsDict["min_feature"] = feature["min"]
-    paramsDict["divisor_mask"] = feature["divisor_mask"]
+    paramsDict["min_feature"] = int(feature["min"])
+    paramsDict["divisor_mask"] = int(feature["divisor_mask"])
+    paramsDict["mult_factor"] = int(feature["mult_factor"])
 
     dict = {
         "table": tableName,
@@ -256,7 +260,7 @@ def getClassifierEntry(dictionary):
     paramsDict = {}
 
     for clusterIndex in range(len(clusters)):
-        paramsDict["cluster"+str(clusterIndex)] = clusters[clusterIndex]["isVideo"]
+        paramsDict["cluster"+str(clusterIndex)] = int(clusters[clusterIndex]["isVideo"])
 
     classifyDict = {
         "table": "MyIngress.tableClassify",
@@ -297,3 +301,12 @@ def generateClassifier(featureParamsList, centroids):
     clusters =  centroids
     createOnlineClassifier()
     createTableEntries()
+
+if __name__ == '__main__':
+    with open('trainer_result.json') as trainer_result:
+        result_dict = json.load(trainer_result)
+        featParamsList = result_dict["featureParams"]
+        centroidList = result_dict["centroids"]
+        generateClassifier(featParamsList, centroidList)
+    createNormalizeAction()
+    
