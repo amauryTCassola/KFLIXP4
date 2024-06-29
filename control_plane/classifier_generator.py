@@ -88,7 +88,7 @@ def writeClassify(file):
             defaultCall = defaultCall+"0);"
 
     writeLines(file, [
-        "table tableClassifier {",
+        "table tableClassify {",
            "\tactions = {",
                 "\t\tactionClassify;",
             "\t}",
@@ -106,19 +106,38 @@ def writeFeatureCalcAction(file, feature):
 
     writeLines(file, [
         "\tbit<TIMESTAMP_WIDTH> min_feature,",
-        "\tbit<DIV_MASK_WIDTH> divisor_mask",
-        "\tbit<DIV_MASK_WIDTH> mult_factor",
+        "\tbit<DIV_MASK_WIDTH> divisor_mask,",
+        "\tbit<TIMESTAMP_WIDTH> mult_factor",
     ])
 
-    writeLines(file, [
-        ") {",
-        "",
-        "\tbit<FEATURE_WIDTH> feature;",
-        "\tregister"+feature+".read(feature, meta.hashKey);",
-        "\tbit<TIMESTAMP_WIDTH> featPadded;",
-        "\tfeatPadded = (bit<TIMESTAMP_WIDTH>) feature;",
-        "",
-    ])
+    if(["SumIat","MaxIat","MinIat","MeanIat","FlowDuration",].__contains__(feature)):
+        writeLines(file, [
+            ") {",
+            "",
+            "\tbit<TIMESTAMP_WIDTH> featPadded;",
+            "\tregister"+feature+".read(featPadded, meta.hashKey);",
+            "",
+        ])
+    elif(feature == "IsTCP"):
+        writeLines(file, [
+            ") {",
+            "",
+            "\tbit<1> feature;",
+            "\tregister"+feature+".read(feature, meta.hashKey);",
+            "\tbit<TIMESTAMP_WIDTH> featPadded;",
+            "\tfeatPadded = (bit<TIMESTAMP_WIDTH>) feature;",
+            "",
+        ])
+    else:
+        writeLines(file, [
+            ") {",
+            "",
+            "\tbit<FEATURE_WIDTH> feature;",
+            "\tregister"+feature+".read(feature, meta.hashKey);",
+            "\tbit<TIMESTAMP_WIDTH> featPadded;",
+            "\tfeatPadded = (bit<TIMESTAMP_WIDTH>) feature;",
+            "",
+        ])
 
     writeLines(file, [
         "\tnormalize(featPadded, min_feature, divisor_mask, mult_factor);",

@@ -102,7 +102,7 @@ action actionClassify(
 	}
 	hdr.features.isVideo = (bit<16>)result;
 }
-table tableClassifier {
+table tableClassify {
 	actions = {
 		actionClassify;
 	}
@@ -120,8 +120,8 @@ action actionCalcPktCountDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -195,8 +195,8 @@ action actionCalcSumPktLengthDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -270,8 +270,8 @@ action actionCalcMaxPktLengthDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -345,8 +345,8 @@ action actionCalcMinPktLengthDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -420,8 +420,8 @@ action actionCalcMeanPktLengthDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -495,14 +495,12 @@ action actionCalcSumIatDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
-	bit<FEATURE_WIDTH> feature;
-	registerSumIat.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
-	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+	registerSumIat.read(featPadded, meta.hashKey);
 
 	normalize(featPadded, min_feature, divisor_mask, mult_factor);
 
@@ -570,14 +568,12 @@ action actionCalcMaxIatDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
-	bit<FEATURE_WIDTH> feature;
-	registerMaxIat.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
-	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+	registerMaxIat.read(featPadded, meta.hashKey);
 
 	normalize(featPadded, min_feature, divisor_mask, mult_factor);
 
@@ -645,14 +641,12 @@ action actionCalcMinIatDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
-	bit<FEATURE_WIDTH> feature;
-	registerMinIat.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
-	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+	registerMinIat.read(featPadded, meta.hashKey);
 
 	normalize(featPadded, min_feature, divisor_mask, mult_factor);
 
@@ -720,14 +714,12 @@ action actionCalcMeanIatDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
-	bit<FEATURE_WIDTH> feature;
-	registerMeanIat.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
-	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+	registerMeanIat.read(featPadded, meta.hashKey);
 
 	normalize(featPadded, min_feature, divisor_mask, mult_factor);
 
@@ -795,14 +787,12 @@ action actionCalcFlowDurationDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
-	bit<FEATURE_WIDTH> feature;
-	registerFlowDuration.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
-	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
+	registerFlowDuration.read(featPadded, meta.hashKey);
 
 	normalize(featPadded, min_feature, divisor_mask, mult_factor);
 
@@ -870,8 +860,8 @@ action actionCalcInitialWindowDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -945,8 +935,8 @@ action actionCalcSumWindowDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -1020,8 +1010,8 @@ action actionCalcMaxWindowDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -1095,8 +1085,8 @@ action actionCalcMinWindowDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -1170,8 +1160,8 @@ action actionCalcMeanWindowDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
 	bit<FEATURE_WIDTH> feature;
@@ -1245,11 +1235,11 @@ action actionCalcIsTCPDists(
 	bit<NORMALIZED_WIDTH> cluster5,
 	bit<NORMALIZED_WIDTH> cluster6,
 	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask
-	bit<DIV_MASK_WIDTH> mult_factor
+	bit<DIV_MASK_WIDTH> divisor_mask,
+	bit<TIMESTAMP_WIDTH> mult_factor
 ) {
 
-	bit<FEATURE_WIDTH> feature;
+	bit<1> feature;
 	registerIsTCP.read(feature, meta.hashKey);
 	bit<TIMESTAMP_WIDTH> featPadded;
 	featPadded = (bit<TIMESTAMP_WIDTH>) feature;

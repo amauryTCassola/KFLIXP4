@@ -186,13 +186,13 @@ control MyIngress(inout headers hdr,
             tableCalcMinIatDists.apply();
             tableCalcMeanIatDists.apply();
 
-            tableCalcWindowDists.apply();
+            tableCalcSumWindowDists.apply();
             tableCalcInitialWindowDists.apply();
             tableCalcMaxWindowDists.apply();
             tableCalcMinWindowDists.apply();
             tableCalcMeanWindowDists.apply();
 
-            tableClassifier.apply();
+            tableClassify.apply();
         }
     }
 }

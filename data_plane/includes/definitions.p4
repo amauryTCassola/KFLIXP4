@@ -7,7 +7,7 @@
 
 #define SHIFT_AMOUNT_WIDTH 4
 
-#define NORMALIZED_WIDTH 10
+#define NORMALIZED_WIDTH 11
 #define DISTANCE_WIDTH 24
 
 #define BOOLEAN 1
