@@ -1,0 +1,19 @@
+{
+    "Mobile": {
+        "Total": 3661,
+        "Filimo": 244,
+        "Telewebion": 656,
+        "Youtube": 401,
+        "TotalVideo": 1301,
+        "TotalNot-Video": 2360
+    },
+    "Desktop": {
+        "Total": 5224,
+        "Netflix": 633,
+        "Twitch": 43,
+        "Youtube": 2665,
+        "TotalVideo": 3341,
+        "TotalNot-Video": 1883
+    },
+    "Total": 8885
+}

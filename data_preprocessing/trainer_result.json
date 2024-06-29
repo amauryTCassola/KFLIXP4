@@ -1,0 +1,235 @@
+{
+    "featureParams": [
+        {
+            "name": "PktCount",
+            "min": 1.0,
+            "divisor_mask": 2070724160,
+            "mult_factor": 0
+        },
+        {
+            "name": "SumPktLength",
+            "min": 54.0,
+            "divisor_mask": 2211315712,
+            "mult_factor": 0
+        },
+        {
+            "name": "MaxPktLength",
+            "min": 54.0,
+            "divisor_mask": 2611634704,
+            "mult_factor": 0
+        },
+        {
+            "name": "MinPktLength",
+            "min": 54.0,
+            "divisor_mask": 366935499,
+            "mult_factor": 0
+        },
+        {
+            "name": "MeanPktLength",
+            "min": 54.0,
+            "divisor_mask": 1761044153,
+            "mult_factor": 0
+        },
+        {
+            "name": "SumIat",
+            "min": 0.0,
+            "divisor_mask": 994574336,
+            "mult_factor": 0
+        },
+        {
+            "name": "MaxIat",
+            "min": 0.0,
+            "divisor_mask": 1157758976,
+            "mult_factor": 0
+        },
+        {
+            "name": "MinIat",
+            "min": 0.0,
+            "divisor_mask": 2159411200,
+            "mult_factor": 0
+        },
+        {
+            "name": "MeanIat",
+            "min": 0.0,
+            "divisor_mask": 2159411200,
+            "mult_factor": 0
+        },
+        {
+            "name": "FlowDuration",
+            "min": 0.0,
+            "divisor_mask": 994574336,
+            "mult_factor": 0
+        },
+        {
+            "name": "InitialWindow",
+            "min": 0.0,
+            "divisor_mask": 2097184,
+            "mult_factor": 0
+        },
+        {
+            "name": "SumWindow",
+            "min": 0.0,
+            "divisor_mask": 905969664,
+            "mult_factor": 0
+        },
+        {
+            "name": "MaxWindow",
+            "min": 0.0,
+            "divisor_mask": 32768,
+            "mult_factor": 0
+        },
+        {
+            "name": "MinWindow",
+            "min": 0.0,
+            "divisor_mask": 2097184,
+            "mult_factor": 0
+        },
+        {
+            "name": "MeanWindow",
+            "min": 0.0,
+            "divisor_mask": 1234731008,
+            "mult_factor": 0
+        },
+        {
+            "name": "IsTCP",
+            "min": 0.0,
+            "divisor_mask": 0,
+            "mult_factor": 1024
+        }
+    ],
+    "centroids": [
+        {
+            "PktCount": 12.289455051699274,
+            "SumPktLength": 12.547038038395804,
+            "MaxPktLength": 60.050717736176225,
+            "MinPktLength": 9.591408425484826,
+            "MeanPktLength": 759.4973832158475,
+            "SumIat": 28.661356474336827,
+            "MaxIat": 62.713244724209844,
+            "MinIat": 0.00014479258929123162,
+            "MeanIat": 1.4952560255763707,
+            "FlowDuration": 28.661356474336827,
+            "InitialWindow": 1000.8721771993144,
+            "SumWindow": 8.694399594409045,
+            "MaxWindow": 2.7245061485146818,
+            "MinWindow": 1000.5874013195562,
+            "MeanWindow": 2.739967108748597,
+            "IsTCP": 1023.9999999999984,
+            "isVideo": 1.0
+        },
+        {
+            "PktCount": 0.6852668630144336,
+            "SumPktLength": 0.07328414220128732,
+            "MaxPktLength": 14.272224593351368,
+            "MinPktLength": 72.70811369744224,
+            "MeanPktLength": 92.98815954158886,
+            "SumIat": 20.563575149502853,
+            "MaxIat": 13.808811038879185,
+            "MinIat": 0.807642824762058,
+            "MeanIat": 2.940989843935916,
+            "FlowDuration": 20.563575149502853,
+            "InitialWindow": 1.0231815394945443e-12,
+            "SumWindow": -1.1546319456101628e-14,
+            "MaxWindow": -9.769962616701378e-15,
+            "MinWindow": 1.9326762412674725e-12,
+            "MeanWindow": -6.217248937900877e-15,
+            "IsTCP": -2.8421709430404007e-12,
+            "isVideo": 0.0
+        },
+        {
+            "PktCount": 0.557321453769279,
+            "SumPktLength": 0.07386083859334835,
+            "MaxPktLength": 31.669375432024445,
+            "MinPktLength": 8.561361164307636,
+            "MeanPktLength": 149.34460493424274,
+            "SumIat": 39.809050315047344,
+            "MaxIat": 95.8248591232708,
+            "MinIat": 0.42987827130972434,
+            "MeanIat": 12.196487165907968,
+            "FlowDuration": 39.809050315047344,
+            "InitialWindow": 1012.2848722899015,
+            "SumWindow": 1.1305450458463717,
+            "MaxWindow": 5.889402518367138,
+            "MinWindow": 1011.5403589979655,
+            "MeanWindow": 5.756903546595425,
+            "IsTCP": 1024.0,
+            "isVideo": 0.0
+        },
+        {
+            "PktCount": 2.9836594873410247,
+            "SumPktLength": 2.818863797408049,
+            "MaxPktLength": 37.69016402557687,
+            "MinPktLength": 8.150749210772064,
+            "MeanPktLength": 323.8587953609845,
+            "SumIat": 43.623543978080534,
+            "MaxIat": 80.45666185296199,
+            "MinIat": 2.923904730454232,
+            "MeanIat": 13.69409219656374,
+            "FlowDuration": 43.623543978080534,
+            "InitialWindow": 324.48863823028864,
+            "SumWindow": 0.18470393736424207,
+            "MaxWindow": 0.7543947132355493,
+            "MinWindow": 290.97535449577714,
+            "MeanWindow": 0.587810632098738,
+            "IsTCP": 1024.000000000001,
+            "isVideo": 0.0
+        },
+        {
+            "PktCount": 19.396076997161995,
+            "SumPktLength": 20.593315551058534,
+            "MaxPktLength": 75.1427386447254,
+            "MinPktLength": 7.504520215258532,
+            "MeanPktLength": 849.6374352882626,
+            "SumIat": 25.18464973078941,
+            "MaxIat": 45.96540650725113,
+            "MinIat": 0.00037628530184630193,
+            "MeanIat": 0.7844916631572918,
+            "FlowDuration": 25.18464973078941,
+            "InitialWindow": 1023.9611955999446,
+            "SumWindow": 51.91361917904451,
+            "MaxWindow": 14.63383514202193,
+            "MinWindow": -2.2737367544323206e-13,
+            "MeanWindow": 15.981381782310045,
+            "IsTCP": 1024.0,
+            "isVideo": 1.0
+        },
+        {
+            "PktCount": 0.492070331012302,
+            "SumPktLength": 0.054773185346569164,
+            "MaxPktLength": 25.630882069098625,
+            "MinPktLength": 0.10009981169545767,
+            "MeanPktLength": 88.96208620552284,
+            "SumIat": 36.207064731763026,
+            "MaxIat": 87.88539414778553,
+            "MinIat": 0.3963597322220744,
+            "MeanIat": 12.242852979401993,
+            "FlowDuration": 36.207064731763026,
+            "InitialWindow": 1017.5802165323244,
+            "SumWindow": 0.6923417853244875,
+            "MaxWindow": 2.14762854120534,
+            "MinWindow": 1.1368683772161603e-13,
+            "MeanWindow": 1.8409936839297893,
+            "IsTCP": 1024.0,
+            "isVideo": 0.0
+        },
+        {
+            "PktCount": 14.20890123377043,
+            "SumPktLength": 12.51273576293979,
+            "MaxPktLength": 41.45265796652658,
+            "MinPktLength": 15.801705128356305,
+            "MeanPktLength": 664.1430110100389,
+            "SumIat": 63.0612838917038,
+            "MaxIat": 45.905946161690885,
+            "MinIat": 0.014645153410622558,
+            "MeanIat": 0.9047806832793581,
+            "FlowDuration": 63.0612838917038,
+            "InitialWindow": -7.958078640513122e-13,
+            "SumWindow": -8.881784197001252e-15,
+            "MaxWindow": -6.217248937900877e-15,
+            "MinWindow": -7.958078640513122e-13,
+            "MeanWindow": 5.329070518200751e-15,
+            "IsTCP": 4.547473508864641e-13,
+            "isVideo": 1.0
+        }
+    ]
+}
