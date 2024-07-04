@@ -7,8 +7,8 @@
 
 #define SHIFT_AMOUNT_WIDTH 4
 
-#define NORMALIZED_WIDTH 11
-#define DISTANCE_WIDTH 24
+#define NORMALIZED_WIDTH 12
+#define DISTANCE_WIDTH 26
 
 #define BOOLEAN 1
 
@@ -102,4 +102,5 @@ struct metadata {
     bit<TIMESTAMP_WIDTH>        return_approx_mean;
 
     bit<NORMALIZED_WIDTH> return_normalize;
+    bit<NORMALIZED_WIDTH> return_subtract;
 }

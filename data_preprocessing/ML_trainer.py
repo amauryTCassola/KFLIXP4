@@ -127,48 +127,58 @@ def get_metrics(X_train, X_test, y_train, y_test, K_range):
                 scores[cluster_num] = scores[cluster_num] + score
                 wss_s[cluster_num] = wss_s[cluster_num] + wss
     
-    plt.figure()
-    plt.plot(K_range, [value/30 for value in accuracies], 'bx-')
-    plt.xlabel('Values of K')
-    plt.ylabel('Accuracy')
-    plt.title('Accuracy')
+    elbow_string = ''
 
-    plt.figure()
-    plt.plot(K_range, [value/30 for value in precisions], 'bx-')
-    plt.xlabel('Values of K')
-    plt.ylabel('Precision')
-    plt.title('Precision')
+    for K in K_range:
+        curWSS = wss_s[K]/30
+        elbow_string += "("+str(K)+","+str(curWSS)+")"
 
-    plt.figure()
-    plt.plot(K_range, [value/30 for value in recalls], 'bx-')
-    plt.xlabel('Values of K')
-    plt.ylabel('Recall')
-    plt.title('Recall')
+    print(elbow_string)
 
-    plt.figure()
-    plt.plot(K_range, [value/30 for value in f1s], 'bx-')
-    plt.xlabel('Values of K')
-    plt.ylabel('F1')
-    plt.title('F1')
+    # plt.figure()
+    # plt.plot(K_range, [value/30 for value in accuracies], 'bx-')
+    # plt.xlabel('Values of K')
+    # plt.ylabel('Accuracy')
+    # plt.title('Accuracy')
 
-    plt.figure()
-    plt.plot(K_range, [value/30 for value in scores], 'bx-')
-    plt.xlabel('Values of K')
-    plt.ylabel('Score')
-    plt.title('Silhouette Score')
+    # plt.figure()
+    # plt.plot(K_range, [value/30 for value in precisions], 'bx-')
+    # plt.xlabel('Values of K')
+    # plt.ylabel('Precision')
+    # plt.title('Precision')
 
-    plt.figure()
-    plt.plot(K_range, [value/30 for value in wss_s], 'bx-')
-    plt.xlabel('Values of K')
-    plt.ylabel('WSS')
-    plt.title('Elbow Method')
+    # plt.figure()
+    # plt.plot(K_range, [value/30 for value in recalls], 'bx-')
+    # plt.xlabel('Values of K')
+    # plt.ylabel('Recall')
+    # plt.title('Recall')
 
-    plt.show()
+    # plt.figure()
+    # plt.plot(K_range, [value/30 for value in f1s], 'bx-')
+    # plt.xlabel('Values of K')
+    # plt.ylabel('F1')
+    # plt.title('F1')
+
+    # plt.figure()
+    # plt.plot(K_range, [value/30 for value in scores], 'bx-')
+    # plt.xlabel('Values of K')
+    # plt.ylabel('Score')
+    # plt.title('Silhouette Score')
+
+    # plt.figure()
+    # plt.plot(K_range, [value/30 for value in wss_s], 'bx-')
+    # plt.xlabel('Values of K')
+    # plt.ylabel('WSS')
+    # plt.title('Elbow Method')
+
+    # plt.show()
 
 if __name__ == '__main__':
     dataset = get_dataset()
 
     featuresList = get_feature_list()
+    norm_scale = 2048
+    cluster_number = 7
 
     X = dataset[featuresList]
     Y = dataset[['isVideo']]
@@ -179,7 +189,7 @@ if __name__ == '__main__':
     featureParamsList = []
 
     for i in range(len(featuresList)):
-        normalization_params = get_normalization_params(max_values[i], min_values[i], scale_max=1024, max_power=32)
+        normalization_params = get_normalization_params(max_values[i], min_values[i], scale_max=norm_scale, max_power=32)
 
         featureParamsList.append({
             "name": featuresList[i],
@@ -190,9 +200,14 @@ if __name__ == '__main__':
 
     
 
-    scaler = MinMaxScaler(feature_range=(0, 1024))
+    scaler = MinMaxScaler(feature_range=(0, norm_scale))
     X_scaled = scaler.fit_transform(X)
-    cluster_number = 7
+
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, Y, test_size=0.33)
+    get_metrics(X_train, X_test, y_train, y_test, range(0,13))
+    exit()
+    
 
     kmeans = KMeans(n_clusters = cluster_number, n_init='auto')
     kmeans.fit(X_scaled)
@@ -239,6 +254,12 @@ if __name__ == '__main__':
     resultDict = dict()
     resultDict["featureParams"] = featureParamsList
     resultDict["centroids"] = centroids
+    resultDict["Metrics"] = {
+        "accuracy": accuracy,
+        "precision": precision,
+        "recall": recall,
+        "f1": f1
+    }
 
     resultFile = open("trainer_result.json", "w")
     json_object = json.dumps(resultDict, indent=4)

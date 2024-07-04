@@ -1,0 +1,17 @@
+{
+    "Total": 114,
+    "Total_video": 9,
+    "Total_not_video": 105,
+    "Byte_accuracy": 0.99534455333542,
+    "Accuracy": 0.8157894736842105,
+    "Precision": 0.2,
+    "Recall": 0.4444444444444444,
+    "F1": 0.2758620689655173,
+    "True_positives": 4,
+    "True_negatives": 89,
+    "False_positives": 16,
+    "False_negatives": 5,
+    "Total_bytes": 44130889,
+    "True_p_bytes": 41595815,
+    "True_n_bytes": 2329625
+}

@@ -70,6 +70,7 @@ control MyIngress(inout headers hdr,
     #include "includes/approximateMeans.p4"
     #include "includes/hashFunctions.p4"
     #include "includes/featureExtractor.p4"
+    #include "includes/calc_distance.p4"
     #include "includes/onlineClassifier.p4"
 
     action drop() {
@@ -164,7 +165,6 @@ control MyIngress(inout headers hdr,
                 tableResetIat.apply();
                 tableResetFlowDuration.apply();
                 tableResetWindowSize.apply();
-                tableResetIsTCP.apply();
             }
 
             //Apply the K-Means classifier
@@ -173,8 +173,6 @@ control MyIngress(inout headers hdr,
             tableCalcPktCountDists.apply();
 
             tableCalcFlowDurationDists.apply();
-
-            tableCalcIsTCPDists.apply();
             
             tableCalcSumPktLengthDists.apply();
             tableCalcMaxPktLengthDists.apply();
@@ -241,6 +239,7 @@ control MyDeparser(packet_out packet, in headers hdr) {
         packet.emit(hdr.features);
         packet.emit(hdr.ipv4);
         packet.emit(hdr.tcp);
+        packet.emit(hdr.udp);
     }
 }
 

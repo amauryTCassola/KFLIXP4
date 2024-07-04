@@ -18,7 +18,6 @@ featureList = [
     "MaxWindow",
     "MinWindow",
     "MeanWindow",
-    "IsTCP"
 ]
 
 def get_feature_list():

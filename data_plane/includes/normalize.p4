@@ -6,7 +6,7 @@
 //mult_factor: a value for multiplication
 
 //Outputs:
-//meta.return_normalize: a 11-bit value with the normalized feature value
+//meta.return_normalize: a 10-bit value with the normalized feature value
 
 #define DIV_MASK_WIDTH 32
 

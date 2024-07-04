@@ -149,10 +149,7 @@ def writeFeatureCalcAction(file, feature):
 
     for index in range(len(clusters)):
         writeLines(file, [
-            "\tbit<DISTANCE_WIDTH> clus"+str(index)+"Dist;",
-            "\tregisterDistances.read(clus"+str(index)+"Dist, "+str(index)+");",
-            "\tclus"+str(index)+"Dist = clus"+str(index)+"Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster"+str(index)+")*(normalized_feature - cluster"+str(index)+"));",
-            "\tregisterDistances.write("+str(index)+", clus"+str(index)+"Dist);\n\n",
+            "\tcalc_distance(normalized_feature, cluster"+str(index)+", "+str(index)+");",
         ])
 
     write(file, "}")
@@ -189,8 +186,6 @@ def writeFeatureCalcs(file):
 def createOnlineClassifier():
     classifier = open("onlineClassifier.p4", "w")
     clusterNumber = len(clusters)
-    write(classifier, '#define CLUSTER_NUMBER '+str(clusterNumber))
-    write(classifier, "register<bit<DISTANCE_WIDTH>>(CLUSTER_NUMBER) registerDistances;")
 
     writeResetDistances(classifier)
     writeClassify(classifier)
@@ -200,56 +195,15 @@ def createOnlineClassifier():
 
 def getIpForwardingEntries(dictionary):
     dictionary["table_entries"] = [
-        {
-        "table": "MyIngress.ipv4_lpm",
-        "default_action": True,
-        "action_name": "MyIngress.drop",
-        "action_params": { }
-      },
       {
         "table": "MyIngress.ipv4_lpm",
-        "match": {
-          "hdr.ipv4.dstAddr": ["10.0.1.1", 32]
-        },
         "action_name": "MyIngress.ipv4_forward",
         "action_params": {
           "dstAddr": "08:00:00:00:01:11",
           "port": 1
-        }
-      },
-      {
-        "table": "MyIngress.ipv4_lpm",
-        "match": {
-          "hdr.ipv4.dstAddr": ["10.0.2.2", 32]
         },
-        "action_name": "MyIngress.ipv4_forward",
-        "action_params": {
-          "dstAddr": "08:00:00:00:02:22",
-          "port": 2
-        }
+        "priority": 0
       },
-      {
-        "table": "MyIngress.ipv4_lpm",
-        "match": {
-          "hdr.ipv4.dstAddr": ["10.0.3.3", 32]
-        },
-        "action_name": "MyIngress.ipv4_forward",
-        "action_params": {
-          "dstAddr": "08:00:00:00:03:00",
-          "port": 3
-        }
-      },
-      {
-        "table": "MyIngress.ipv4_lpm",
-        "match": {
-          "hdr.ipv4.dstAddr": ["10.0.4.4", 32]
-        },
-        "action_name": "MyIngress.ipv4_forward",
-        "action_params": {
-          "dstAddr": "08:00:00:00:04:00",
-          "port": 4
-        }
-      }
     ]
 
 def getFeatureEntries(feature, dictionary):

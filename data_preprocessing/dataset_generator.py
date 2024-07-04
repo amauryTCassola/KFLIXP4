@@ -160,8 +160,3 @@ if __name__ == '__main__':
 
     df = pd.DataFrame(data=otherFlowsDataset, columns=columnsList)
     df.to_csv('not-video-dataset.csv', sep = ',', index = False)
-
-    #3 cenários, light, medium e heavy
-    #variando número de features, de clsusters, etc
-    #analisar tradeoff entre memória e acurácia
-    #citar feature selection, citar referências, falar que é um trabalho futuro

@@ -1,5 +1,3 @@
-#define CLUSTER_NUMBER 7
-register<bit<DISTANCE_WIDTH>>(CLUSTER_NUMBER) registerDistances;
 action actionResetDistances() {
 	registerDistances.write(0, (bit<DISTANCE_WIDTH>)0);
 	registerDistances.write(1, (bit<DISTANCE_WIDTH>)0);
@@ -134,48 +132,13 @@ action actionCalcPktCountDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcPktCountDists {
 	actions = {
@@ -209,48 +172,13 @@ action actionCalcSumPktLengthDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcSumPktLengthDists {
 	actions = {
@@ -284,48 +212,13 @@ action actionCalcMaxPktLengthDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMaxPktLengthDists {
 	actions = {
@@ -359,48 +252,13 @@ action actionCalcMinPktLengthDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMinPktLengthDists {
 	actions = {
@@ -434,48 +292,13 @@ action actionCalcMeanPktLengthDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMeanPktLengthDists {
 	actions = {
@@ -507,48 +330,13 @@ action actionCalcSumIatDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcSumIatDists {
 	actions = {
@@ -580,48 +368,13 @@ action actionCalcMaxIatDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMaxIatDists {
 	actions = {
@@ -653,48 +406,13 @@ action actionCalcMinIatDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMinIatDists {
 	actions = {
@@ -726,48 +444,13 @@ action actionCalcMeanIatDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMeanIatDists {
 	actions = {
@@ -799,48 +482,13 @@ action actionCalcFlowDurationDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcFlowDurationDists {
 	actions = {
@@ -874,48 +522,13 @@ action actionCalcInitialWindowDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcInitialWindowDists {
 	actions = {
@@ -949,48 +562,13 @@ action actionCalcSumWindowDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcSumWindowDists {
 	actions = {
@@ -1024,48 +602,13 @@ action actionCalcMaxWindowDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMaxWindowDists {
 	actions = {
@@ -1099,48 +642,13 @@ action actionCalcMinWindowDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMinWindowDists {
 	actions = {
@@ -1174,48 +682,13 @@ action actionCalcMeanWindowDists(
 	bit<NORMALIZED_WIDTH> normalized_feature;
 	normalized_feature = meta.return_normalize;
 
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
+	calc_distance(normalized_feature, cluster0, 0);
+	calc_distance(normalized_feature, cluster1, 1);
+	calc_distance(normalized_feature, cluster2, 2);
+	calc_distance(normalized_feature, cluster3, 3);
+	calc_distance(normalized_feature, cluster4, 4);
+	calc_distance(normalized_feature, cluster5, 5);
+	calc_distance(normalized_feature, cluster6, 6);
 }
 table tableCalcMeanWindowDists {
 	actions = {
@@ -1225,79 +698,4 @@ table tableCalcMeanWindowDists {
 		meta.pktCount: ternary;
 	}
 	default_action = actionCalcMeanWindowDists(0,0,0,0,0,0,0,0,0,0);
-}
-action actionCalcIsTCPDists(
-	bit<NORMALIZED_WIDTH> cluster0,
-	bit<NORMALIZED_WIDTH> cluster1,
-	bit<NORMALIZED_WIDTH> cluster2,
-	bit<NORMALIZED_WIDTH> cluster3,
-	bit<NORMALIZED_WIDTH> cluster4,
-	bit<NORMALIZED_WIDTH> cluster5,
-	bit<NORMALIZED_WIDTH> cluster6,
-	bit<TIMESTAMP_WIDTH> min_feature,
-	bit<DIV_MASK_WIDTH> divisor_mask,
-	bit<TIMESTAMP_WIDTH> mult_factor
-) {
-
-	bit<1> feature;
-	registerIsTCP.read(feature, meta.hashKey);
-	bit<TIMESTAMP_WIDTH> featPadded;
-	featPadded = (bit<TIMESTAMP_WIDTH>) feature;
-
-	normalize(featPadded, min_feature, divisor_mask, mult_factor);
-
-	bit<NORMALIZED_WIDTH> normalized_feature;
-	normalized_feature = meta.return_normalize;
-
-	bit<DISTANCE_WIDTH> clus0Dist;
-	registerDistances.read(clus0Dist, 0);
-	clus0Dist = clus0Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster0)*(normalized_feature - cluster0));
-	registerDistances.write(0, clus0Dist);
-
-
-	bit<DISTANCE_WIDTH> clus1Dist;
-	registerDistances.read(clus1Dist, 1);
-	clus1Dist = clus1Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster1)*(normalized_feature - cluster1));
-	registerDistances.write(1, clus1Dist);
-
-
-	bit<DISTANCE_WIDTH> clus2Dist;
-	registerDistances.read(clus2Dist, 2);
-	clus2Dist = clus2Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster2)*(normalized_feature - cluster2));
-	registerDistances.write(2, clus2Dist);
-
-
-	bit<DISTANCE_WIDTH> clus3Dist;
-	registerDistances.read(clus3Dist, 3);
-	clus3Dist = clus3Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster3)*(normalized_feature - cluster3));
-	registerDistances.write(3, clus3Dist);
-
-
-	bit<DISTANCE_WIDTH> clus4Dist;
-	registerDistances.read(clus4Dist, 4);
-	clus4Dist = clus4Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster4)*(normalized_feature - cluster4));
-	registerDistances.write(4, clus4Dist);
-
-
-	bit<DISTANCE_WIDTH> clus5Dist;
-	registerDistances.read(clus5Dist, 5);
-	clus5Dist = clus5Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster5)*(normalized_feature - cluster5));
-	registerDistances.write(5, clus5Dist);
-
-
-	bit<DISTANCE_WIDTH> clus6Dist;
-	registerDistances.read(clus6Dist, 6);
-	clus6Dist = clus6Dist + (bit<DISTANCE_WIDTH>)((normalized_feature - cluster6)*(normalized_feature - cluster6));
-	registerDistances.write(6, clus6Dist);
-
-
-}
-table tableCalcIsTCPDists {
-	actions = {
-		actionCalcIsTCPDists;
-	}
-	key = {
-		meta.pktCount: ternary;
-	}
-	default_action = actionCalcIsTCPDists(0,0,0,0,0,0,0,0,0,0);
 }
