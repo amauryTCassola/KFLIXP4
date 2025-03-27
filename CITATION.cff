@@ -1,0 +1,14 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: K-Flix
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Amaury
+    family-names: Cassola
+    email: atcassola@inf.ufrgs.br
+repository-code: 'https://github.com/amauryTCassola/KFLIXP4'
