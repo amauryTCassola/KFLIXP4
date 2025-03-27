@@ -8,16 +8,16 @@ featureList = [
     "MaxPktLength",
     "MinPktLength",
     "MeanPktLength",
-    "SumIat",
+#    "SumIat",
     "MaxIat",
     "MinIat",
     "MeanIat",
     "FlowDuration",
-    "InitialWindow",
-    "SumWindow",
-    "MaxWindow",
-    "MinWindow",
-    "MeanWindow",
+#    "InitialWindow",
+#    "SumWindow",
+#    "MaxWindow",
+#    "MinWindow",
+#    "MeanWindow",
 ]
 
 def get_feature_list():
@@ -60,14 +60,14 @@ def start_new_flow(key, pkt, flowDict, copy=False):
         thisFlow["MaxWindow"] = TCPWindow
         thisFlow["MinWindow"] = TCPWindow
         thisFlow["MeanWindow"] = TCPWindow
-        thisFlow["IsTCP"] = 1
+        #thisFlow["IsTCP"] = 1
     else:
         thisFlow["InitialWindow"] = 0
         thisFlow["SumWindow"] = 0
         thisFlow["MaxWindow"] = 0
         thisFlow["MinWindow"] = 0
         thisFlow["MeanWindow"] = 0
-        thisFlow["IsTCP"] = 0
+        #thisFlow["IsTCP"] = 0
 
     flowDict[key] = thisFlow
 
@@ -206,7 +206,13 @@ def read_capture(capFile):
         
 def read_nonvideo_capture(capFile):
     result = read_capture(capFile)
-    array = list(result.values())
+    array = []
+
+    for key in result.keys():
+        if result[key]["PktCount"] > 1:
+            result[key]["isVideo"] = 0
+            array.append(result[key])
+
     return array
 
 def is_private_ip(address):
@@ -222,6 +228,7 @@ def read_video_capture(videoCapFile):
         duration = tempVideoDict[key]["FlowDuration"]/1000000 #seconds
         pktCount = tempVideoDict[key]["PktCount"]
         if pktCount > 25 and duration > 10 and not is_private_ip(src):
+            tempVideoDict[key]["isVideo"] = 1
             videoArray.append(tempVideoDict[key])
 
     return videoArray

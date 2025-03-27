@@ -105,10 +105,56 @@ def normalize(feature, min_feature, div_mask, mult_factor, max_power = 32):
 #     print("\nMax errors:")
 #     print(maxErrors)
 
-if __name__ == '__main__':
+testValues = [
+    {
+        'value': 75,
+        'min': 5,
+        'max': 96
+    },
+    {
+        'value': 500,
+        'min': 0,
+        'max': 1000
+    },
+    {
+        'value': 500,
+        'min': 300,
+        'max': 8420
+    },
+    {
+        'value': 1024,
+        'min': 0,
+        'max': 65535
+    },
+    {
+        'value': 400,
+        'min': 0,
+        'max': 300
+    },
+    {
+        'value': 200,
+        'min': 0,
+        'max': 2000
+    },
+    {
+        'value': 0,
+        'min': 0,
+        'max': 1000
+    },
+]
 
-    result = normalize(8192, 0, 1048592, 0, 32)
-    print(result)
+if __name__ == '__main__':
+    print("Valor\tMinimo\tMaximo\tMinMax\tAprox\tErro")
+
+    for test in testValues:
+        params = get_normalization_params(test['max'], test['min'], scale_max = 1024, max_power = 16)
+
+        normalized = 1024*((test['value'] - test['min']) / (test['max'] - test['min']))
+        approx = normalize(test['value'], params['min_feature'], params['divisor_mask'], params['mult_factor'], max_power=16)
+
+        error = abs(normalized - approx)
+
+        print(test['value'],"\t",test['min'],"\t", test['max'],"\t",round(normalized, 4),"\t",approx,"\t", round(error, 4))
 
     exit()
     values = np.array([i for i in range(1, 1001)])

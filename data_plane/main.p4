@@ -103,6 +103,8 @@ control MyIngress(inout headers hdr,
             hdr.ethernet.etherType = TYPE_FEATURES;
             hdr.features.setValid();
             hdr.features.etherType = TYPE_IPV4;
+            hdr.features.cluster = (bit<16>)8;
+            hdr.features.isVideo = (bit<16>)0;
 
             // apply basic ipv4 forwarding
             ipv4_lpm.apply();
@@ -153,9 +155,9 @@ control MyIngress(inout headers hdr,
                 tableIncrementPktLength.apply();
                 tableIncrementFlowDuration.apply();
 
-                if (hdr.tcp.isValid()){
-                    tableIncrementWindowSize.apply();
-                }
+                //if (hdr.tcp.isValid()){
+                //    tableIncrementWindowSize.apply();
+                //}
             }
             else {
                 //If it's a new flow or there has been a hash collision,
@@ -164,33 +166,35 @@ control MyIngress(inout headers hdr,
                 tableResetPktLength.apply();
                 tableResetIat.apply();
                 tableResetFlowDuration.apply();
-                tableResetWindowSize.apply();
+                //tableResetWindowSize.apply();
             }
 
-            //Apply the K-Means classifier
-            tableResetDistances.apply();
+            if (meta.pktCount > 25){
+                //Apply the K-Means classifier
+                tableResetDistances.apply();
 
-            tableCalcPktCountDists.apply();
+                tableCalcPktCountDists.apply();
 
-            tableCalcFlowDurationDists.apply();
-            
-            tableCalcSumPktLengthDists.apply();
-            tableCalcMaxPktLengthDists.apply();
-            tableCalcMinPktLengthDists.apply();
-            tableCalcMeanPktLengthDists.apply();
+                tableCalcFlowDurationDists.apply();
+                
+                tableCalcSumPktLengthDists.apply();
+                tableCalcMaxPktLengthDists.apply();
+                tableCalcMinPktLengthDists.apply();
+                tableCalcMeanPktLengthDists.apply();
 
-            tableCalcSumIatDists.apply();
-            tableCalcMaxIatDists.apply();
-            tableCalcMinIatDists.apply();
-            tableCalcMeanIatDists.apply();
+                //tableCalcSumIatDists.apply();
+                tableCalcMaxIatDists.apply();
+                tableCalcMinIatDists.apply();
+                tableCalcMeanIatDists.apply();
 
-            tableCalcSumWindowDists.apply();
-            tableCalcInitialWindowDists.apply();
-            tableCalcMaxWindowDists.apply();
-            tableCalcMinWindowDists.apply();
-            tableCalcMeanWindowDists.apply();
+                //tableCalcSumWindowDists.apply();
+                //tableCalcInitialWindowDists.apply();
+                //tableCalcMaxWindowDists.apply();
+                //tableCalcMinWindowDists.apply();
+                //tableCalcMeanWindowDists.apply();
 
-            tableClassify.apply();
+                tableClassify.apply();
+            }
         }
     }
 }

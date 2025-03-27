@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import silhouette_score
 import json
 
-cluster_number = 7 #either 6 or 7
+cluster_number = 7 #new number, used to be 7
 
 def test_normalization(x, x_scaled, featureParamsList):
     n = len(x)
@@ -56,7 +56,20 @@ def test_normalization(x, x_scaled, featureParamsList):
 def get_dataset():
     videoDF = pd.read_csv('video-dataset.csv', header = 0)
     nonVideoDF = pd.read_csv('not-video-dataset.csv', header = 0)
+
+    filteredVideo = videoDF[videoDF.PktCount > 24]
+    filteredNonVideo = nonVideoDF[nonVideoDF.PktCount > 24]
+
     df = pd.concat([videoDF, nonVideoDF])
+
+    # totalNonVideo = len(filteredVideo[filteredVideo.isVideo == 0]) + len(filteredNonVideo)
+    # print({
+    #     "total": len(df),
+    #     "video": len(filteredVideo[filteredVideo.isVideo == 1]),
+    #     "nonVideo": totalNonVideo
+    # })
+    # exit()
+
     return df.sample(frac=1) #This shuffles the dataset randomly
 
 def run_kmeans(cluster_number, X_train, y_train, X_test, y_test):
@@ -96,10 +109,26 @@ def run_kmeans(cluster_number, X_train, y_train, X_test, y_test):
 
     total_n = true_negatives + true_positives + false_negatives + false_positives
 
-    accuracy = (true_positives + true_negatives)/total_n
-    precision = true_positives/(true_positives + false_positives)
-    recall = true_positives/(true_positives + false_negatives)
-    f1 = 2*( (precision*recall)/(precision+recall) )
+    # print({
+    #     "cluster_number": cluster_number
+    # })
+    # print({
+    #     "true_negatives": true_negatives,
+    #     "true_positives": true_positives,
+    #     "false_negatives": false_negatives,
+    #     "false_positives": false_positives
+    # })
+
+    if true_positives + false_positives == 0:
+        accuracy = (true_positives + true_negatives)/total_n
+        precision = 0
+        recall = 0
+        f1 = 0
+    else:
+        accuracy = (true_positives + true_negatives)/total_n
+        precision = true_positives/(true_positives + false_positives)
+        recall = true_positives/(true_positives + false_negatives)
+        f1 = 2*( (precision*recall)/(precision+recall) )
 
     score = silhouette_score(X_train, cluster_labels)
 
@@ -135,50 +164,49 @@ def get_metrics(X_train, X_test, y_train, y_test, K_range):
 
     print(elbow_string)
 
-    # plt.figure()
-    # plt.plot(K_range, [value/30 for value in accuracies], 'bx-')
-    # plt.xlabel('Values of K')
-    # plt.ylabel('Accuracy')
-    # plt.title('Accuracy')
+    plt.figure()
+    plt.plot(K_range, [value/30 for value in accuracies], 'bx-')
+    plt.xlabel('Values of K')
+    plt.ylabel('Accuracy')
+    plt.title('Accuracy')
 
-    # plt.figure()
-    # plt.plot(K_range, [value/30 for value in precisions], 'bx-')
-    # plt.xlabel('Values of K')
-    # plt.ylabel('Precision')
-    # plt.title('Precision')
+    plt.figure()
+    plt.plot(K_range, [value/30 for value in precisions], 'bx-')
+    plt.xlabel('Values of K')
+    plt.ylabel('Precision')
+    plt.title('Precision')
 
-    # plt.figure()
-    # plt.plot(K_range, [value/30 for value in recalls], 'bx-')
-    # plt.xlabel('Values of K')
-    # plt.ylabel('Recall')
-    # plt.title('Recall')
+    plt.figure()
+    plt.plot(K_range, [value/30 for value in recalls], 'bx-')
+    plt.xlabel('Values of K')
+    plt.ylabel('Recall')
+    plt.title('Recall')
 
-    # plt.figure()
-    # plt.plot(K_range, [value/30 for value in f1s], 'bx-')
-    # plt.xlabel('Values of K')
-    # plt.ylabel('F1')
-    # plt.title('F1')
+    plt.figure()
+    plt.plot(K_range, [value/30 for value in f1s], 'bx-')
+    plt.xlabel('Values of K')
+    plt.ylabel('F1')
+    plt.title('F1')
 
-    # plt.figure()
-    # plt.plot(K_range, [value/30 for value in scores], 'bx-')
-    # plt.xlabel('Values of K')
-    # plt.ylabel('Score')
-    # plt.title('Silhouette Score')
+    plt.figure()
+    plt.plot(K_range, [value/30 for value in scores], 'bx-')
+    plt.xlabel('Values of K')
+    plt.ylabel('Score')
+    plt.title('Silhouette Score')
 
-    # plt.figure()
-    # plt.plot(K_range, [value/30 for value in wss_s], 'bx-')
-    # plt.xlabel('Values of K')
-    # plt.ylabel('WSS')
-    # plt.title('Elbow Method')
+    plt.figure()
+    plt.plot(K_range, [value/30 for value in wss_s], 'bx-')
+    plt.xlabel('Values of K')
+    plt.ylabel('WSS')
+    plt.title('Elbow Method')
 
-    # plt.show()
+    plt.show()
 
 if __name__ == '__main__':
     dataset = get_dataset()
 
     featuresList = get_feature_list()
     norm_scale = 2048
-    cluster_number = 7
 
     X = dataset[featuresList]
     Y = dataset[['isVideo']]
@@ -204,9 +232,9 @@ if __name__ == '__main__':
     X_scaled = scaler.fit_transform(X)
 
     
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, Y, test_size=0.33)
-    get_metrics(X_train, X_test, y_train, y_test, range(0,13))
-    exit()
+    # X_train, X_test, y_train, y_test = train_test_split(X_scaled, Y, test_size=0.33)
+    # get_metrics(X_train, X_test, y_train, y_test, range(0,13))
+    # exit()
     
 
     kmeans = KMeans(n_clusters = cluster_number, n_init='auto')
@@ -262,5 +290,5 @@ if __name__ == '__main__':
     }
 
     resultFile = open("trainer_result.json", "w")
-    json_object = json.dumps(resultDict, indent=4)
+    json_object = json.dumps(resultDict, indent=4, default=int)
     resultFile.write(json_object)
